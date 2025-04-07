@@ -1,4 +1,4 @@
-package com.example.divasegura;
+package com.example.divasegura.controladores;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
@@ -6,8 +6,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import static com.example.divasegura.Estructura.EstructuraContacto.*;
-import static com.example.divasegura.Estructura.EstructuraUsuario.*;
+import static com.example.divasegura.modelos.Estructura.EstructuraContacto.*;
+import static com.example.divasegura.modelos.Estructura.EstructuraUsuario.*;
+
+import com.example.divasegura.modelos.Estructura;
+import com.example.divasegura.modelos.Usuario;
+import com.example.divasegura.utils.CrearBD;
 
 public class CRUDHelper {
     private CrearBD dbHelper;

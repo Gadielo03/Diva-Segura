@@ -1,4 +1,4 @@
-package com.example.divasegura;
+package com.example.divasegura.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
