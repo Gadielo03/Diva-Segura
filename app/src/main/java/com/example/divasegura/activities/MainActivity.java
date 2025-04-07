@@ -1,9 +1,7 @@
-package com.example.divasegura;
+package com.example.divasegura.activities;
 
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
@@ -11,6 +9,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.divasegura.controladores.CRUDHelper;
+import com.example.divasegura.R;
+import com.example.divasegura.modelos.Usuario;
 
 import java.io.File;
 

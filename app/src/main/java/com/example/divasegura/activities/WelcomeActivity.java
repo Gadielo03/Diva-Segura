@@ -1,9 +1,7 @@
-package com.example.divasegura;
+package com.example.divasegura.activities;
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.Manifest;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,7 +10,6 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -25,6 +22,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.divasegura.controladores.CRUDHelper;
+import com.example.divasegura.R;
+import com.example.divasegura.utils.AppPreferences;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -34,13 +35,13 @@ import java.util.Locale;
 public class WelcomeActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_CAMERA_PERMISSION = 100;
-    private Uri photoUri;
     Button btnTakePhoto,btnRegistrar;
     boolean isPhotoTaken = false;
     private String currentPhotoPath;
 
     private EditText etNombreUsuario, etNumeroUsuario, etDomicilioUsuario;
-    private EditText etNumeroContacto1, etNombreContacto1, etRelacionContacto1;
+    private EditText etNumeroContacto1, etNombreContacto1;
+    private EditText etRelacionContacto1, etRelacionContacto2;
     private EditText etNumeroContacto2, etNombreContacto2;
 
     private CRUDHelper crudHelper;
@@ -52,11 +53,8 @@ public class WelcomeActivity extends AppCompatActivity {
         //para Testeo descomentar esta linea de codigo para reiniciar el first run
         //AppPreferences.resetFirstRun(this);
 
-
         if (AppPreferences.isFirstRun(this)) {
             setContentView(R.layout.activity_welcome);
-
-
 
             EdgeToEdge.enable(this);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -65,16 +63,13 @@ public class WelcomeActivity extends AppCompatActivity {
             return insets;
         });
 
-
-
-
-
         etNombreUsuario = findViewById(R.id.etNombreUsuario);
         etNumeroUsuario = findViewById(R.id.etTelefonoUsuario);
         etDomicilioUsuario = findViewById(R.id.etDomicilioUsuario);
         etNumeroContacto1 = findViewById(R.id.etTelefonoContactoEmergencia1);
         etNombreContacto1 = findViewById(R.id.etNombreContactoEmergencia1);
         etRelacionContacto1 = findViewById(R.id.etRelacionContactoEmergencia1);
+        etRelacionContacto2 = findViewById(R.id.etRelacionContactoEmergencia2);
         etNumeroContacto2 = findViewById(R.id.etTelefonoContactoEmergencia2);
         etNombreContacto2 = findViewById(R.id.etNombreContactoEmergencia2);
         btnRegistrar = findViewById(R.id.btnRegistrar);
@@ -85,7 +80,9 @@ public class WelcomeActivity extends AppCompatActivity {
         });
 
         btnRegistrar.setOnClickListener(v -> {
-            ValidarRegistro(v);
+            if (RegistrosValidos(v)) {
+                guardarDatos(v);
+            }
         });
 
         crudHelper = new CRUDHelper(this);
@@ -95,11 +92,11 @@ public class WelcomeActivity extends AppCompatActivity {
         }
     }
 
-    public void ValidarRegistro(View view) {
+    public boolean RegistrosValidos(View view) {
         // Validar que se haya tomado/seleccionado una foto
         if (!isPhotoTaken) {
             Toast.makeText(this, "Por favor toma o selecciona una foto", Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
 
         // Validar campos obligatorios
@@ -109,7 +106,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 etNumeroContacto1.getText().toString().isEmpty()) {
 
             Toast.makeText(this, "Por favor completa todos los campos obligatorios", Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
 
         // Validar longitud de números telefónicos
@@ -118,11 +115,10 @@ public class WelcomeActivity extends AppCompatActivity {
                 etNumeroContacto2.getText().toString().length() != 10) {
 
             Toast.makeText(this, "Los números deben tener 10 dígitos", Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
 
-        // Si todo está bien, guardar los datos
-        guardarDatos(view);
+        return true;
     }
 
     public void guardarDatos(View view) {
@@ -162,22 +158,7 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private boolean guardarContactos(long userId) {
-        ContentValues contacto1 = new ContentValues();
-        contacto1.put(Estructura.EstructuraContacto.COLUMNA_USUARIO_ID, userId);
-        contacto1.put(Estructura.EstructuraContacto.COLUMNA_NOMBRE, etNombreContacto1.getText().toString());
-        contacto1.put(Estructura.EstructuraContacto.COLUMNA_NUMERO, etNumeroContacto1.getText().toString());
-        contacto1.put(Estructura.EstructuraContacto.COLUMNA_RELACION, etRelacionContacto1.getText().toString());
-        contacto1.put(Estructura.EstructuraContacto.COLUMNA_TIPO_CONTACTO, 1);
-
-        ContentValues contacto2 = new ContentValues();
-        contacto2.put(Estructura.EstructuraContacto.COLUMNA_USUARIO_ID, userId);
-        contacto2.put(Estructura.EstructuraContacto.COLUMNA_NOMBRE, etNombreContacto2.getText().toString());
-        contacto2.put(Estructura.EstructuraContacto.COLUMNA_NUMERO, etNumeroContacto2.getText().toString());
-        contacto2.put(Estructura.EstructuraContacto.COLUMNA_RELACION, "Contacto secundario");
-        contacto2.put(Estructura.EstructuraContacto.COLUMNA_TIPO_CONTACTO, 2);
-
         try {
-
             crudHelper.open();
 
             long id1 = crudHelper.insertarContacto(userId,
@@ -188,10 +169,8 @@ public class WelcomeActivity extends AppCompatActivity {
             long id2 = crudHelper.insertarContacto(userId,
                     etNombreContacto2.getText().toString(),
                     etNumeroContacto2.getText().toString(),
-                    "Contacto secundario",
+                    etRelacionContacto2.getText().toString(),
                     2);
-
-
 
             return id1 != -1 && id2 != -1;
 
@@ -239,7 +218,6 @@ public class WelcomeActivity extends AppCompatActivity {
             }
 
             if (photoFile != null) {
-                // Obtenemos la URI usando FileProvider
                 Uri photoURI = FileProvider.getUriForFile(this,
                         getApplicationContext().getPackageName() + ".provider",
                         photoFile);
@@ -278,14 +256,6 @@ public class WelcomeActivity extends AppCompatActivity {
             // Aquí puedes hacer algo con la foto guardada si lo necesitas
             // photoUri contiene la ubicación del archivo
         }
-    }
-
-    // Método para guardar la ruta de la foto en SharedPreferences
-    private void saveImagePath(String path) {
-        SharedPreferences preferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("last_photo_path", path);
-        editor.apply();
     }
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,

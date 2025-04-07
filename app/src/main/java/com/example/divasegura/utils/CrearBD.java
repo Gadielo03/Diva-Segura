@@ -1,12 +1,14 @@
-package com.example.divasegura;
+package com.example.divasegura.utils;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
-import static com.example.divasegura.Estructura.EstructuraContacto.*;
-import static com.example.divasegura.Estructura.EstructuraUsuario.*;
+import static com.example.divasegura.modelos.Estructura.EstructuraContacto.*;
+import static com.example.divasegura.modelos.Estructura.EstructuraUsuario.*;
+
+import com.example.divasegura.modelos.Estructura;
 
 public class CrearBD extends SQLiteOpenHelper {
     private static final String NOMBRE_BD = "DivaSegura.db";

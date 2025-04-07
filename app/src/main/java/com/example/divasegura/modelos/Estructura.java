@@ -1,4 +1,4 @@
-package com.example.divasegura;
+package com.example.divasegura.modelos;
 
 import android.provider.BaseColumns;
 
