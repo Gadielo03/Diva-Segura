@@ -14,16 +14,10 @@
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="¡Bienvenida!"
+        android:text="Diva Segura"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="46sp"
         android:textStyle="bold" />
-
-    <ImageView
-        android:id="@+id/ivFotoUsuario"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:srcCompat="@tools:sample/avatars" />
 
 </LinearLayout>

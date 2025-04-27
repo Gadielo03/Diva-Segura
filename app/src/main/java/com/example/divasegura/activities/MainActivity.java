@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         if (imgFile.exists()) {
             imgFotoPerfil.setImageURI(Uri.fromFile(imgFile));
         } else {
-            // Manejar el caso en que la imagen no existe
             imgFotoPerfil.setImageResource(R.drawable.ic_launcher_background);
         }
     }
@@ -60,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
             String imagePath = usuario.getRutaFoto();
             mostrarFoto(imagePath);
         } else {
-            // Manejar el caso en que no se encontró el usuario
+            //Todo
 
         }
     }
