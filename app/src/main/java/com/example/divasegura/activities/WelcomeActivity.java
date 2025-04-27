@@ -51,7 +51,7 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //para Testeo descomentar esta linea de codigo para reiniciar el first run
-        //AppPreferences.resetFirstRun(this);
+        AppPreferences.resetFirstRun(this);
 
         if (AppPreferences.isFirstRun(this)) {
             setContentView(R.layout.activity_welcome);
@@ -145,7 +145,6 @@ public class WelcomeActivity extends AppCompatActivity {
             if (contactosGuardados) {
                 // Pasar a la siguiente actividad
                 Intent intent = new Intent(this, MainActivity.class);
-                intent.putExtra("user_id", userId);
                 startActivity(intent);
                 finish();
             } else {
@@ -241,7 +240,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 storageDir      /* directory */
         );
 
-        // Guardamos la ruta absoluta del archivo
+        // Guardamos la ruta absoluta
         currentPhotoPath = imageFile.getAbsolutePath();
         return imageFile;
     }
@@ -249,12 +248,9 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            // Foto guardada exitosamente
+            // Foto guardada
             Toast.makeText(this, "Foto guardada correctamente", Toast.LENGTH_SHORT).show();
             isPhotoTaken = true;
-
-            // Aquí puedes hacer algo con la foto guardada si lo necesitas
-            // photoUri contiene la ubicación del archivo
         }
     }
 
