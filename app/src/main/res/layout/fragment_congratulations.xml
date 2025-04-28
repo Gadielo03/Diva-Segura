@@ -9,9 +9,11 @@
     <ImageView
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:src="@android:drawable/ic_dialog_info"
-        android:tint="#de71a5"
-        android:layout_marginBottom="24dp"/>
+        android:layout_marginBottom="24dp"
+        android:scaleX="1.85"
+        android:scaleY="1.70"
+        android:src="@drawable/ic_flower"
+        android:tint="#de71a5" />
 
     <TextView
         android:layout_width="match_parent"
