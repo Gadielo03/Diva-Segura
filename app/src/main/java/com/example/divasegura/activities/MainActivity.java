@@ -18,7 +18,6 @@ import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
     private CRUDHelper crudHelper;
-    private ImageView imgFotoPerfil;
     Usuario usuario;
 
     @Override
@@ -41,26 +40,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void mostrarFoto(String imagePath) {
-        File imgFile = new File(imagePath);
-
-        if (imgFile.exists()) {
-            imgFotoPerfil.setImageURI(Uri.fromFile(imgFile));
-        } else {
-            imgFotoPerfil.setImageResource(R.drawable.ic_launcher_background);
-        }
-    }
-
     private void cargarUsuario() {
         crudHelper.open();
         usuario = crudHelper.obtenerUsuario();
 
         if (usuario != null) {
             String imagePath = usuario.getRutaFoto();
-            mostrarFoto(imagePath);
-        } else {
-            //Todo
-
         }
     }
 }
