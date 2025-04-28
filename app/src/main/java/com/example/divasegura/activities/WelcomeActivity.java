@@ -21,10 +21,23 @@ import androidx.core.content.FileProvider;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.viewpager2.widget.ViewPager2;
+import androidx.viewpager2.widget.ViewPager2;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+
+import com.example.divasegura.adapters.RegistrationPagerAdapter;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+import com.example.divasegura.fragments.UserInfoFragment;
+import com.example.divasegura.fragments.EmergencyContactFragment;
+import com.example.divasegura.fragments.CongratulationsFragment;
 
 import com.example.divasegura.controladores.CRUDHelper;
 import com.example.divasegura.R;
 import com.example.divasegura.utils.AppPreferences;
+import com.google.android.material.tabs.TabLayout;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,6 +57,9 @@ public class WelcomeActivity extends AppCompatActivity {
     private EditText etRelacionContacto1, etRelacionContacto2;
     private EditText etNumeroContacto2, etNombreContacto2;
 
+    private ViewPager2 viewPager;
+    private TabLayout tabLayout;
+
     private CRUDHelper crudHelper;
 
     @Override
@@ -51,44 +67,75 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //para Testeo descomentar esta linea de codigo para reiniciar el first run
-        AppPreferences.resetFirstRun(this);
+        //AppPreferences.resetFirstRun(this);
 
         if (AppPreferences.isFirstRun(this)) {
             setContentView(R.layout.activity_welcome);
 
             EdgeToEdge.enable(this);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+            ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+                return insets;
+            });
 
-        etNombreUsuario = findViewById(R.id.etNombreUsuario);
-        etNumeroUsuario = findViewById(R.id.etTelefonoUsuario);
-        etDomicilioUsuario = findViewById(R.id.etDomicilioUsuario);
-        etNumeroContacto1 = findViewById(R.id.etTelefonoContactoEmergencia1);
-        etNombreContacto1 = findViewById(R.id.etNombreContactoEmergencia1);
-        etRelacionContacto1 = findViewById(R.id.etRelacionContactoEmergencia1);
-        etRelacionContacto2 = findViewById(R.id.etRelacionContactoEmergencia2);
-        etNumeroContacto2 = findViewById(R.id.etTelefonoContactoEmergencia2);
-        etNombreContacto2 = findViewById(R.id.etNombreContactoEmergencia2);
-        btnRegistrar = findViewById(R.id.btnRegistrar);
+            // Set up ViewPager and TabLayout
+            viewPager = findViewById(R.id.viewPager);
+            tabLayout = findViewById(R.id.tabDots);
 
-        btnTakePhoto = findViewById(R.id.btnTakePhoto);
-        btnTakePhoto.setOnClickListener(v -> {
-            checkCameraPermission();
-        });
+            // Set up the adapter
+            RegistrationPagerAdapter adapter = new RegistrationPagerAdapter(this);
+            viewPager.setAdapter(adapter);
 
-        btnRegistrar.setOnClickListener(v -> {
-            if (RegistrosValidos(v)) {
-                guardarDatos(v);
-            }
-        });
+            // Disable swiping (navigation controlled by buttons)
+            viewPager.setUserInputEnabled(false);
 
-        crudHelper = new CRUDHelper(this);
+            // Connect TabLayout with ViewPager
+            TabLayoutMediator mediator = new TabLayoutMediator(tabLayout, viewPager,
+                    (tab, position) -> {
+                        // No text for tabs
+                    }
+            );
+            mediator.attach();
+
+            crudHelper = new CRUDHelper(this);
         } else {
             startActivity(new Intent(this, MainActivity.class));
             finish();
+        }
+    }
+
+    public void navigateToPage(int page) {
+        viewPager.setCurrentItem(page);
+    }
+
+    private class RegistrationPagerAdapter extends FragmentStateAdapter {
+        private static final int NUM_PAGES = 4;
+
+        public RegistrationPagerAdapter(FragmentActivity activity) {
+            super(activity);
+        }
+
+        @NonNull
+        @Override
+        public Fragment createFragment(int position) {
+            switch (position) {
+                case 0:
+                    return new UserInfoFragment();
+                case 1:
+                    return new EmergencyContactFragment(1);
+                case 2:
+                    return new EmergencyContactFragment(2);
+                case 3:
+                    return new CongratulationsFragment();
+                default:
+                    return new UserInfoFragment();
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return NUM_PAGES;
         }
     }
 
