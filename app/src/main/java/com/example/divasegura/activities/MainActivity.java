@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        imgFotoPerfil = findViewById(R.id.ivFotoUsuario);
+//        imgFotoPerfil = findViewById(R.id.ivFotoUsuario);
 
         crudHelper = new CRUDHelper(this);
 
