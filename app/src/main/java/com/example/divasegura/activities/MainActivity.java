@@ -34,6 +34,8 @@ import com.example.divasegura.activities.Alert;
 
 import java.io.File;
 import java.sql.SQLOutput;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Intent locationServiceIntent;
@@ -108,33 +110,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        int id = item.getItemId();
+            public boolean onNavigationItemSelected(MenuItem item) {
+                int id = item.getItemId();
 
-        if (id == R.id.nav_info) {
-            // Handle information action
-            Toast.makeText(this, "Información", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_config) {
-            // Handle configuration action
-            Toast.makeText(this, "Configuración", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_alerts) {
-            // Handle alerts action
-            Toast.makeText(this, "Alertas", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_photo) {
-            // Handle photo action
-            Toast.makeText(this, "Tomar foto", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_terms) {
-            // Handle terms action
-            Toast.makeText(this, "Términos y condiciones", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_privacy) {
-            // Handle privacy action
-            Toast.makeText(this, "Aviso de privacidad", Toast.LENGTH_SHORT).show();
-        }
+                // Crear un diccionario de mensajes
+                Map<Integer, String> mensajes = new HashMap<>();
+                mensajes.put(R.id.nav_info, "Información");
+                mensajes.put(R.id.nav_config, "Configuración");
+                mensajes.put(R.id.nav_alerts, "Alertas");
+                mensajes.put(R.id.nav_photo, "Tomar foto");
+                mensajes.put(R.id.nav_terms, "Términos y condiciones");
+                mensajes.put(R.id.nav_privacy, "Aviso de privacidad");
 
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
-    }
+                // Obtener el mensaje correspondiente al id
+                String mensaje = mensajes.get(id);
+
+                if (mensaje != null) {
+                    Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
+                }
+
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            }
 
     @Override
     public void onBackPressed() {
