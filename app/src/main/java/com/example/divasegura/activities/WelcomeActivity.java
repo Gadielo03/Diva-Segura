@@ -69,7 +69,7 @@ public class WelcomeActivity extends AppCompatActivity {
         //para Testeo descomentar esta linea de codigo para reiniciar el first run
         //AppPreferences.resetFirstRun(this);
 
-        if (!AppPreferences.isFirstRun(this)) {
+        if (AppPreferences.isFirstRun(this)) {
             setContentView(R.layout.activity_welcome);
 
             EdgeToEdge.enable(this);
