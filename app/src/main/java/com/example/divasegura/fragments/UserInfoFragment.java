@@ -2,6 +2,7 @@ package com.example.divasegura.fragments;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -72,7 +73,6 @@ public class UserInfoFragment extends Fragment {
 
         btnTakePhoto.setOnClickListener(v -> {
             checkCameraPermission();
-            mostrarFoto(currentPhotoPath);
         });
 
         return view;
@@ -148,11 +148,32 @@ public class UserInfoFragment extends Fragment {
         return imageFile;
     }
 
-    private void mostrarFoto(String imagePath) {
-        File imgFile = new File(imagePath);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+            // La foto se tomó correctamente, ahora cargarla en el ImageView
+            mostrarFoto(currentPhotoPath);
+        }
+    }
+
+    private void mostrarFoto(String imagePath) {
+        if (imagePath == null) {
+            ivPreviewPhoto.setImageResource(R.drawable.ic_launcher_background); // Imagen por defecto
+            return;
+        }
+
+        File imgFile = new File(imagePath);
         if (imgFile.exists()) {
-            ivPreviewPhoto.setImageURI(Uri.fromFile(imgFile.getAbsoluteFile()));
+            // Usa FileProvider para evitar problemas de permisos en Android 7+
+            Uri photoUri = FileProvider.getUriForFile(
+                    requireContext(),
+                    requireContext().getPackageName() + ".provider",
+                    imgFile
+            );
+
+            ivPreviewPhoto.setImageURI(photoUri);
         } else {
             ivPreviewPhoto.setImageResource(R.drawable.ic_launcher_background);
         }

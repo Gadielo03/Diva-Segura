@@ -72,7 +72,8 @@
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             android:visibility="visible"
-            tools:srcCompat="@tools:sample/avatars" />
+            tools:srcCompat="@tools:sample/avatars"
+            android:src="@drawable/button_pink_background"/>
         <Button
             android:id="@+id/btnTakePhoto"
             style="@style/Widget.AppCompat.Button.Colored"

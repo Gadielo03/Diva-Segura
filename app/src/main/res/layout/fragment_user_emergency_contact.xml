@@ -62,10 +62,10 @@
             android:layout_height="wrap_content"
             android:background="@drawable/edit_text_background"
             android:ems="10"
-            android:hint="Parentesco"
-            android:inputType="phone"
+            android:hint="Parentesco del Contacto"
+            android:inputType="text"
             android:padding="12dp"
-            android:textColor="#FFF"
+            android:textColor="@color/white"
             android:textColorHint="@color/white"
             android:textSize="24sp" />
 
