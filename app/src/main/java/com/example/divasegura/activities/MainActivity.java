@@ -105,9 +105,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Alert alert911 = new Alert(MainActivity.this);
         //alert911.call911();
+         startLocationTracking();
     }
 
     private void startLocationTracking() {
+        try {
+            locationServiceIntent = new Intent(this, LocationTracker.class);
+            startService(locationServiceIntent);
+
+            new android.os.Handler().postDelayed(() -> {
+                LocationTracker tracker = new LocationTracker();
+                Location lastLocation = tracker.getLastLocation();
+
+                if (lastLocation != null) {
+                    String locationText = lastLocation.getLatitude() + "," + lastLocation.getLongitude();
+                    Toast.makeText(this, locationText, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "No location available", Toast.LENGTH_SHORT).show();
+                }
+            }, 5000);
+        }catch (Exception e){
+            Toast.makeText(this, "Error starting location tracking", Toast.LENGTH_SHORT).show();
+        }
         locationServiceIntent = new Intent(this, LocationTracker.class);
         startService(locationServiceIntent);
 
