@@ -14,7 +14,7 @@ public class Alert {
     public void call911() {
         try {
             Intent callIntent = new Intent(Intent.ACTION_DIAL);
-            callIntent.setData(Uri.parse("tel:8713445900"));
+            callIntent.setData(Uri.parse("tel:8713345900"));//ig: @alejandroorgg
 
             if(callIntent.resolveActivity(context.getPackageManager()) != null) {
                 context.startActivity(callIntent);

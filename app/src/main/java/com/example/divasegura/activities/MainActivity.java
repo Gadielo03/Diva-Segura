@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.telephony.SmsManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -34,6 +36,7 @@ import com.example.divasegura.activities.Alert;
 
 import java.io.File;
 import java.sql.SQLOutput;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import android.os.Bundle;
@@ -173,4 +176,66 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 drawerLayout.closeDrawer(GravityCompat.START);
                 return true;
             }
+
+public void triggerEmergencyAlert() {
+    // Get current location
+    LocationTracker tracker = new LocationTracker();
+    Location currentLocation = tracker.getLastLocation();
+
+    // Prepare emergency message with location
+    String locationText = "No hay ubicación disponible";
+    if (currentLocation != null) {
+        locationText = "https://maps.google.com/?q=" +
+                      currentLocation.getLatitude() + "," +
+                      currentLocation.getLongitude();
+    }
+
+    String emergencyMessage = "ALERTA DE EMERGENCIA: " + usuario.getNombre() +
+                             " está en peligro. Ubicación: " + locationText;
+
+    // Send message to registered contacts
+    if (contacto1 != null && contacto1.getNumero() != null) {
+        sendSMS(contacto1.getNumero(), emergencyMessage);
+    }
+
+    if (contacto2 != null && contacto2.getNumero() != null) {
+        sendSMS(contacto2.getNumero(), emergencyMessage);
+    }
+
+    // Call emergency services (911)
+    Alert alert911 = new Alert(MainActivity.this);
+    alert911.call911();
+
+    // Extension: Start continuous location sharing for 30 minutes
+    startLocationSharing(30);
+
+    // Display confirmation
+    Toast.makeText(this, "Alerta de emergencia enviada", Toast.LENGTH_LONG).show();
+}
+
+private void sendSMS(String phoneNumber, String message) {
+    try {
+        SmsManager smsManager = SmsManager.getDefault();
+        ArrayList<String> parts = smsManager.divideMessage(message);
+        smsManager.sendMultipartTextMessage(phoneNumber, null, parts, null, null);
+    } catch (Exception e) {
+        Toast.makeText(this, "Error al enviar mensaje: " + e.getMessage(),
+                      Toast.LENGTH_SHORT).show();
+        e.printStackTrace();
+    }
+}
+
+private void startLocationSharing(int minutes) {
+    // Create intent for extended location sharing
+    Intent extendedLocationIntent = new Intent(this, LocationTracker.class);
+    extendedLocationIntent.putExtra("SHARING_DURATION", minutes * 60 * 1000); // Convert to milliseconds
+    startService(extendedLocationIntent);
+
+    // Schedule to stop location sharing after specified time
+    new Handler().postDelayed(() -> {
+        stopService(extendedLocationIntent);
+        Toast.makeText(this, "Compartición de ubicación finalizada",
+                      Toast.LENGTH_SHORT).show();
+    }, minutes * 60 * 1000);
+}
 }
