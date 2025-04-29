@@ -1,0 +1,4 @@
+<style android:name="nav_drawer_text_style"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:name="android:textStyle">bold</item>
+</style>

@@ -36,6 +36,21 @@ import java.io.File;
 import java.sql.SQLOutput;
 import java.util.HashMap;
 import java.util.Map;
+import android.os.Bundle;
+import android.view.MenuItem;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.viewpager2.widget.ViewPager2;
+
+import com.example.divasegura.R;
+import com.example.divasegura.adapters.ViewPagerAdapter;
+import com.example.divasegura.fragments.MainScreenFragment;
+import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Intent locationServiceIntent;
@@ -45,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private UsuariosController usuariosController;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
+     private ViewPager2 viewPager;
+    private ViewPagerAdapter viewPagerAdapter;
 
      @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +85,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Set up navigation view
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // Set up ViewPager
+        viewPager = findViewById(R.id.viewPager);
+        setupViewPager();
 
         usuariosController = new UsuariosController(this);
         contactoController = new ContactoController(this);
@@ -109,10 +130,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             stopService(locationServiceIntent);
         }
     }
+    private void setupViewPager() {
+        viewPagerAdapter = new ViewPagerAdapter(this);
+        viewPagerAdapter.addFragment(MainScreenFragment.newInstance());
+        viewPager.setAdapter(viewPagerAdapter);
+        viewPager.setUserInputEnabled(false); // Disable swiping if needed
+    }
 
 
     @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
                 int id = item.getItemId();
 
                 // Crear un diccionario de mensajes
@@ -134,13 +170,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 drawerLayout.closeDrawer(GravityCompat.START);
                 return true;
             }
-
-    @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
 }

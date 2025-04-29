@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#4D017D"
+    tools:context=".fragments.MainScreenFragment">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnAlert"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:background="@drawable/main_circle_button"
+        android:text="MANTEN PRESIONADO\nPARA ALERTAR"
+        android:textColor="@color/white"
+        android:textSize="38sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.333" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnAlert">
+
+        <LinearLayout
+            android:layout_width="158dp"
+            android:layout_height="194sp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/btnCall"
+                android:layout_width="match_parent"
+                android:layout_height="124dp"
+                android:layout_margin="10sp"
+                android:background="@drawable/circle_button"
+                android:contentDescription="Llamada"
+                android:padding="20dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_police" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="58dp"
+                android:text="Llamar\n911"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="158dp"
+            android:layout_height="194sp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/btnLocation"
+                android:layout_width="match_parent"
+                android:layout_height="124dp"
+                android:layout_margin="10sp"
+                android:background="@drawable/circle_button"
+                android:contentDescription="Localizacion"
+                android:padding="20dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_emergency" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="57dp"
+                android:text="Llamar Seguridad Pública"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
