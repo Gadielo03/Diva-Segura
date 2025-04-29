@@ -127,22 +127,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }catch (Exception e){
             Toast.makeText(this, "Error starting location tracking", Toast.LENGTH_SHORT).show();
         }
-        locationServiceIntent = new Intent(this, LocationTracker.class);
-        startService(locationServiceIntent);
-
-        new android.os.Handler().postDelayed(() -> {
-            LocationTracker tracker = new LocationTracker();
-            Location lastLocation = tracker.getLastLocation();
-
-            if(lastLocation != null) {
-                String locationText = lastLocation.getLatitude() + "," + lastLocation.getLongitude();
-                System.out.println("DEBUG LOCATION: " + locationText);
-                Toast.makeText(this, locationText, Toast.LENGTH_SHORT).show();
-            } else {
-                System.out.println("DEBUG LOCATION: No location available");
-                Toast.makeText(this, "No location available", Toast.LENGTH_SHORT).show();
-            }
-        }, 5000);
     }
 
     @Override
