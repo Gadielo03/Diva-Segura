@@ -30,6 +30,7 @@ public class LocationTracker extends Service implements LocationListener {
                     MIN_DISTANCE_M,
                     this
             );
+            lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         } catch (SecurityException e) {
             Log.e("Location", "Permission denied");
         }
@@ -39,13 +40,18 @@ public class LocationTracker extends Service implements LocationListener {
     public void onLocationChanged(Location location) {
         if (location != null) {
             lastLocation = location;
-            System.out.println(lastLocation.toString());
+            Log.d("LocationTracker", "New location: " + location.getLatitude() + ", " + location.getLongitude());
         }
     }
 
     public Location getLastLocation() {
-        System.out.println(lastLocation.toString());
-        return lastLocation;
+        if(lastLocation != null) {
+            Log.d("LocationTracker", "New location: " + lastLocation.getLatitude() + ", " + lastLocation.getLongitude());
+            return lastLocation;
+        } else {
+            Log.e("LocationTracker", "No location available");
+            return null;
+        }
     }
 
     @Override
