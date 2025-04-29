@@ -12,6 +12,10 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.example.divasegura.controladores.ContactoController;
+import com.example.divasegura.controladores.UsuariosController;
+import com.example.divasegura.modelos.Contacto;
 import com.google.android.material.navigation.NavigationView;
 import android.view.MenuItem;
 
@@ -30,11 +34,15 @@ import com.example.divasegura.activities.Alert;
 
 import java.io.File;
 import java.sql.SQLOutput;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private CRUDHelper crudHelper;
     private Intent locationServiceIntent;
-    Usuario usuario;
+    private Usuario usuario;
+    private Contacto contacto1,contacto2;
+    private ContactoController contactoController;
+    private UsuariosController usuariosController;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
 
@@ -61,10 +69,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        crudHelper = new CRUDHelper(this);
-        usuario = new Usuario();
+        usuariosController = new UsuariosController(this);
+        contactoController = new ContactoController(this);
+        usuariosController.open();
+        contactoController.open();
+
+        // Get user data
+         usuario = usuariosController.obtenerUsuarioUnico();
+         contacto1 = contactoController.obtenerContactoUnico(1);
+         contacto2 = contactoController.obtenerContactoUnico(2);
+
         Alert alert911 = new Alert(MainActivity.this);
-        alert911.call911();
+        //alert911.call911();
     }
 
     private void startLocationTracking() {
@@ -94,42 +110,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void cargarUsuario() {
-        crudHelper.open();
-        usuario = crudHelper.obtenerUsuario();
-
-        if (usuario != null) {
-            String imagePath = usuario.getRutaFoto();
-        }
-    }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        int id = item.getItemId();
+            public boolean onNavigationItemSelected(MenuItem item) {
+                int id = item.getItemId();
 
-        if (id == R.id.nav_info) {
-            // Handle information action
-            Toast.makeText(this, "Información", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_config) {
-            // Handle configuration action
-            Toast.makeText(this, "Configuración", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_alerts) {
-            // Handle alerts action
-            Toast.makeText(this, "Alertas", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_photo) {
-            // Handle photo action
-            Toast.makeText(this, "Tomar foto", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_terms) {
-            // Handle terms action
-            Toast.makeText(this, "Términos y condiciones", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_privacy) {
-            // Handle privacy action
-            Toast.makeText(this, "Aviso de privacidad", Toast.LENGTH_SHORT).show();
-        }
+                // Crear un diccionario de mensajes
+                Map<Integer, String> mensajes = new HashMap<>();
+                mensajes.put(R.id.nav_info, "Información");
+                mensajes.put(R.id.nav_config, "Configuración");
+                mensajes.put(R.id.nav_alerts, "Alertas");
+                mensajes.put(R.id.nav_photo, "Tomar foto");
+                mensajes.put(R.id.nav_terms, "Términos y condiciones");
+                mensajes.put(R.id.nav_privacy, "Aviso de privacidad");
 
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
-    }
+                // Obtener el mensaje correspondiente al id
+                String mensaje = mensajes.get(id);
+
+                if (mensaje != null) {
+                    Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
+                }
+
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            }
 
     @Override
     public void onBackPressed() {
