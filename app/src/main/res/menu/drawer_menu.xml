@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_info"
+        android:title="Información" />
+    <item
+        android:id="@+id/nav_config"
+        android:title="Configuración" />
+    <item
+        android:id="@+id/nav_alerts"
+        android:title="Alertas emitidas por el dispositivo" />
+    <item
+        android:id="@+id/nav_photo"
+        android:title="Tomar foto" />
+    <item
+        android:id="@+id/nav_terms"
+        android:title="Términos y condiciones de la aplicación" />
+    <item
+        android:id="@+id/nav_privacy"
+        android:title="Aviso de privacidad" />
+</menu>
