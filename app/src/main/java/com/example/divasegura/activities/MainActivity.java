@@ -1,8 +1,11 @@
 package com.example.divasegura.activities;
 
+import android.content.Intent;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,12 +16,16 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.divasegura.controladores.CRUDHelper;
 import com.example.divasegura.R;
 import com.example.divasegura.modelos.Usuario;
+import com.example.divasegura.services.LocationTracker;
+
+import com.example.divasegura.activities.Alert;
 
 import java.io.File;
+import java.sql.SQLOutput;
 
 public class MainActivity extends AppCompatActivity {
     private CRUDHelper crudHelper;
-    private ImageView imgFotoPerfil;
+    private Intent locationServiceIntent;
     Usuario usuario;
 
     @Override
@@ -36,18 +43,38 @@ public class MainActivity extends AppCompatActivity {
         crudHelper = new CRUDHelper(this);
 
         usuario = new Usuario();
+        Alert alert911 = new Alert(MainActivity.this);
+        alert911.call911();
 
-        cargarUsuario();
 
+        //cargarUsuario();
+        //startLocationTracking();
     }
 
-    private void mostrarFoto(String imagePath) {
-        File imgFile = new File(imagePath);
+    private void startLocationTracking() {
+        locationServiceIntent = new Intent(this, LocationTracker.class);
+        startService(locationServiceIntent);
 
-        if (imgFile.exists()) {
-            imgFotoPerfil.setImageURI(Uri.fromFile(imgFile));
-        } else {
-            imgFotoPerfil.setImageResource(R.drawable.ic_launcher_background);
+        new android.os.Handler().postDelayed(() -> {
+            LocationTracker tracker = new LocationTracker();
+            Location lastLocation = tracker.getLastLocation();
+
+            if(lastLocation != null) {
+                String locationText = lastLocation.getLatitude() + "," + lastLocation.getLongitude();
+                System.out.println("DEBUG LOCATION: " + locationText);
+                Toast.makeText(this, locationText, Toast.LENGTH_SHORT).show();
+            } else {
+                System.out.println("DEBUG LOCATION: No location available");
+                Toast.makeText(this, "No location available", Toast.LENGTH_SHORT).show();
+            }
+        }, 5000);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(locationServiceIntent != null) {
+            stopService(locationServiceIntent);
         }
     }
 
@@ -57,10 +84,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (usuario != null) {
             String imagePath = usuario.getRutaFoto();
-            mostrarFoto(imagePath);
-        } else {
-            //Todo
-
         }
     }
 }
