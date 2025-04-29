@@ -27,6 +27,8 @@ import androidx.fragment.app.Fragment;
 import com.example.divasegura.R;
 import com.example.divasegura.activities.WelcomeActivity;
 import com.example.divasegura.controladores.CRUDHelper;
+import com.example.divasegura.controladores.ContactoController;
+import com.example.divasegura.controladores.UsuariosController;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,7 +45,8 @@ public class UserInfoFragment extends Fragment {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_CAMERA_PERMISSION = 100;
 
-    private CRUDHelper crudHelper;
+    private UsuariosController usuariosController;
+    private ContactoController contactoController;
 
     String currentPhotoPath;
 
@@ -51,7 +54,6 @@ public class UserInfoFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        crudHelper = new CRUDHelper(getContext());
         View view = inflater.inflate(R.layout.fragment_user_info, container, false);
 
         etTelefono = view.findViewById(R.id.etTelefonoUsuario);
@@ -61,14 +63,22 @@ public class UserInfoFragment extends Fragment {
         btnTakePhoto = view.findViewById(R.id.btnTakePhoto);
         ivPreviewPhoto = view.findViewById(R.id.ivPreviewPhoto);
 
+        usuariosController = new UsuariosController(this.getContext());
+        contactoController = new ContactoController(this.getContext());
+        usuariosController.open();
+        contactoController.open();
+
+        usuariosController.eliminarTodosUsuarios();
+        contactoController.eliminarTodosContactos();
+
         btnNext.setOnClickListener(v -> {
-            if (validateInputFields()) {
-                ((WelcomeActivity) getActivity()).navigateToPage(1);
+            if (!validateInputFields()) {
+                return;
             }
-
-            // Save user info to database
-            // TODO
-
+            if(!saveUserInfo()){
+                return;
+            }
+            ((WelcomeActivity) getActivity()).navigateToPage(1);
         });
 
         btnTakePhoto.setOnClickListener(v -> {
@@ -176,6 +186,23 @@ public class UserInfoFragment extends Fragment {
             ivPreviewPhoto.setImageURI(photoUri);
         } else {
             ivPreviewPhoto.setImageResource(R.drawable.ic_launcher_background);
+        }
+    }
+
+    private boolean saveUserInfo() {
+        String nombre = etNombre.getText().toString();
+        String numero = etTelefono.getText().toString();
+        String domicilio = etDomicilio.getText().toString();
+
+
+        // Guardar la información del usuario en la base de datos
+        long id = usuariosController.insertarUsuario(nombre, numero, domicilio, currentPhotoPath);
+        if (id != -1) {
+            Toast.makeText(getActivity(), "Información guardada correctamente", Toast.LENGTH_SHORT).show();
+            return true;
+        } else {
+            Toast.makeText(getActivity(), "Error al guardar la información", Toast.LENGTH_SHORT).show();
+            return false;
         }
     }
 }

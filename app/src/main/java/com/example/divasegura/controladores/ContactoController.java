@@ -6,10 +6,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.divasegura.modelos.Contacto;
 import com.example.divasegura.modelos.Estructura;
 import static com.example.divasegura.modelos.Estructura.EstructuraContacto.*;
 
-import com.example.divasegura.modelos.Usuario;
 import com.example.divasegura.utils.CrearBD;
 
 public class ContactoController {
@@ -41,23 +41,34 @@ public class ContactoController {
         return database.insert(Estructura.EstructuraContacto.NOMBRE_TABLA, null, values);
     }
 
-    public Cursor buscarContactos(long usuarioId, Integer tipoContacto) {
-        String whereClause = COLUMNA_USUARIO_ID + " = ?";
-        String[] whereArgs = {String.valueOf(usuarioId)};
+    public Contacto obtenerContactoUnico(long id) {
+            Cursor cursor = database.query(
+                    Estructura.EstructuraContacto.NOMBRE_TABLA,
+                    new String[]{_ID, COLUMNA_USUARIO_ID, COLUMNA_NOMBRE, COLUMNA_NUMERO, COLUMNA_RELACION, COLUMNA_TIPO_CONTACTO},
+                    _ID + " = ?",
+                    new String[]{String.valueOf(id)},
+                    null, null, null,
+                    "1"
+            );
 
-        if (tipoContacto != null) {
-            whereClause += " AND " + COLUMNA_TIPO_CONTACTO + " = ?";
-            whereArgs = new String[]{String.valueOf(usuarioId), String.valueOf(tipoContacto)};
+            if (cursor != null && cursor.moveToFirst()) {
+                Contacto contacto = new Contacto(
+                        cursor.getLong(cursor.getColumnIndexOrThrow(_ID)),
+                        cursor.getLong(cursor.getColumnIndexOrThrow(COLUMNA_USUARIO_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMNA_NOMBRE)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMNA_NUMERO)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMNA_RELACION)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMNA_TIPO_CONTACTO))
+                );
+                cursor.close();
+                return contacto;
+            }
+
+            if (cursor != null) {
+                cursor.close();
+            }
+            return null;
         }
-
-        return database.query(
-                Estructura.EstructuraContacto.NOMBRE_TABLA,
-                new String[]{_ID, Estructura.EstructuraContacto.COLUMNA_NOMBRE, Estructura.EstructuraContacto.COLUMNA_NUMERO, COLUMNA_RELACION},
-                whereClause,
-                whereArgs,
-                null, null, null
-        );
-    }
 
     public int actualizarContacto(long id, String nombre, String numero, String relacion) {
         ContentValues values = new ContentValues();
@@ -80,6 +91,10 @@ public class ContactoController {
                 new String[]{String.valueOf(id)}
         );
     }
+
+    public void eliminarTodosContactos() {
+        database.delete(Estructura.EstructuraContacto.NOMBRE_TABLA, null, null);
+    }
     public boolean guardarContactos(Context context,
                                     String nombreUsuario, String numeroUsuario, String domicilio, String foto,
                                     String nombreContacto1, String numeroContacto1, String relacionContacto1,
@@ -91,7 +106,6 @@ public class ContactoController {
 
             // Insert user using existing UsuariosController
             UsuariosController usuariosController = new UsuariosController(context);
-            usuariosController.open();
 
             // First delete any existing user and contacts to maintain single user setup
             usuariosController.eliminarTodosUsuarios();

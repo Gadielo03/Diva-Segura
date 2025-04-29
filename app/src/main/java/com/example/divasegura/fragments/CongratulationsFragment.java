@@ -12,6 +12,7 @@ import android.content.Intent;
 
 import com.example.divasegura.R;
 import com.example.divasegura.activities.MainActivity;
+import com.example.divasegura.utils.AppPreferences;
 
 public class CongratulationsFragment extends Fragment {
     private Button btnFinish;
@@ -25,6 +26,7 @@ public class CongratulationsFragment extends Fragment {
 
         btnFinish.setOnClickListener(v -> {
             // Save all collected data and proceed to main activity
+            AppPreferences.setFirstRun(this.getContext(), false);
             Intent intent = new Intent(getActivity(), MainActivity.class);
             startActivity(intent);
             getActivity().finish();

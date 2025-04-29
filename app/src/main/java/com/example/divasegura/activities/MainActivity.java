@@ -12,6 +12,10 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.example.divasegura.controladores.ContactoController;
+import com.example.divasegura.controladores.UsuariosController;
+import com.example.divasegura.modelos.Contacto;
 import com.google.android.material.navigation.NavigationView;
 import android.view.MenuItem;
 
@@ -32,9 +36,11 @@ import java.io.File;
 import java.sql.SQLOutput;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private CRUDHelper crudHelper;
     private Intent locationServiceIntent;
-    Usuario usuario;
+    private Usuario usuario;
+    private Contacto contacto1,contacto2;
+    private ContactoController contactoController;
+    private UsuariosController usuariosController;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
 
@@ -61,10 +67,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        crudHelper = new CRUDHelper(this);
-        usuario = new Usuario();
+        usuariosController = new UsuariosController(this);
+        contactoController = new ContactoController(this);
+        usuariosController.open();
+        contactoController.open();
+
+        // Get user data
+         usuario = usuariosController.obtenerUsuarioUnico();
+         contacto1 = contactoController.obtenerContactoUnico(1);
+         contacto2 = contactoController.obtenerContactoUnico(2);
+
         Alert alert911 = new Alert(MainActivity.this);
-        alert911.call911();
+        //alert911.call911();
     }
 
     private void startLocationTracking() {
@@ -91,15 +105,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onDestroy();
         if(locationServiceIntent != null) {
             stopService(locationServiceIntent);
-        }
-    }
-
-    private void cargarUsuario() {
-        crudHelper.open();
-        usuario = crudHelper.obtenerUsuario();
-
-        if (usuario != null) {
-            String imagePath = usuario.getRutaFoto();
         }
     }
 
