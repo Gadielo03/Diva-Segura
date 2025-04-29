@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#4D017D"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    tools:context=".activities.InfoActivity">
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="20dp" />
+
+    <TextView
+        android:id="@+id/textViewTitleInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Informacion"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="46sp"
+        android:textStyle="bold"
+        tools:ignore="MissingConstraints" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+
+    <!-- Contenedor principal para centrar toda la cuadrícula -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal">
+
+        <!-- Primera fila de botones -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="30dp">
+
+            <!-- Botón 1 -->
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginEnd="20dp">
+
+                <ImageButton
+                    android:id="@+id/btnViolentometro"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/round_button"
+                    android:backgroundTint="#8B2EB9"
+                    android:contentDescription="Violentómetro"
+                    android:elevation="8dp"
+                    android:padding="20dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/baseline_traffic_24" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Violentómetro"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+            <!-- Botón 2 -->
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginStart="20dp">
+
+                <ImageButton
+                    android:id="@+id/btnNumerosDeAtencion"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/round_button"
+                    android:backgroundTint="#8B2EB9"
+                    android:elevation="8dp"
+                    android:scaleType="fitCenter"
+                    android:padding="20dp"
+                    android:src="@drawable/baseline_contact_phone_24"
+                    android:contentDescription="Números de Atención" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Números de Atención"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textAlignment="center" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Segunda fila de botones -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="30dp">
+
+            <!-- Botón 3 -->
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginEnd="20dp">
+
+                <ImageButton
+                    android:id="@+id/btnCentroDeInformacion"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/round_button"
+                    android:backgroundTint="#8B2EB9"
+                    android:elevation="8dp"
+                    android:scaleType="fitCenter"
+                    android:padding="20dp"
+                    android:src="@drawable/baseline_auto_stories_24"
+                    android:contentDescription="Centro de Información" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Centro de Información"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+            <!-- Botón 4 -->
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginStart="20dp">
+
+                <ImageButton
+                    android:id="@+id/btnModalidadesDeViolencia"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/round_button"
+                    android:backgroundTint="#8B2EB9"
+                    android:elevation="8dp"
+                    android:scaleType="fitCenter"
+                    android:padding="20dp"
+                    android:src="@drawable/baseline_bloodtype_24"
+                    android:contentDescription="Modalidades de Violencia" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Modalidades de Violencia"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textAlignment="center" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Tercera fila de botones -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <!-- Botón 5 -->
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginEnd="20dp">
+
+                <ImageButton
+                    android:id="@+id/btnTiposDeViolencia"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/round_button"
+                    android:backgroundTint="#8B2EB9"
+                    android:elevation="8dp"
+                    android:scaleType="fitCenter"
+                    android:padding="20dp"
+                    android:src="@drawable/baseline_health_and_safety_24"
+                    android:contentDescription="Tipos de Violencia" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tipos de Violencia"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+            <!-- Botón 6 -->
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginStart="20dp">
+
+                <ImageButton
+                    android:id="@+id/btnAlerta"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/round_button"
+                    android:backgroundTint="#8B2EB9"
+                    android:elevation="8dp"
+                    android:scaleType="fitCenter"
+                    android:padding="20dp"
+                    android:src="@drawable/baseline_crisis_alert_24"
+                    android:contentDescription="Alerta" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Alerta (botón de emergencia)"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textAlignment="center" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
