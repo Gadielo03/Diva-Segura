@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Selected/checked state - using the pink color from your project -->
+    <item android:color="#de71a5" android:state_checked="true" />
+    <!-- Default state -->
+    <item android:color="#FFFFFF" />
+</selector>
