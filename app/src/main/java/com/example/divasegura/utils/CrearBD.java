@@ -42,12 +42,26 @@ public class CrearBD extends SQLiteOpenHelper {
                 Estructura.EstructuraUsuario.NOMBRE_TABLA + "(" + _ID + ") ON DELETE CASCADE)";
 
         db.execSQL(crearTablaContactos);
+
+        // Crear tabla RegistroAlertas
+        String creatTablaRegistroAlertas = "CREATE TABLE " + Estructura.EstructuraRegistro.NOMBRE_TABLA + " (" +
+                _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                Estructura.EstructuraRegistro.COLUMNA_USUARIO_ID + " INTEGER NOT NULL, " +
+                Estructura.EstructuraRegistro.COLUMNA_FECHA + " TEXT NOT NULL, " +
+                Estructura.EstructuraRegistro.COLUMNA_LATITUD + " REAL NOT NULL, " +
+                Estructura.EstructuraRegistro.COLUMNA_LONGITUD + " REAL NOT NULL, " +
+                Estructura.EstructuraRegistro.COLUMNA_FOTOGRAFIA + " TEXT, " +
+                "FOREIGN KEY(" + Estructura.EstructuraRegistro.COLUMNA_USUARIO_ID + ") REFERENCES " +
+                Estructura.EstructuraUsuario.NOMBRE_TABLA + "(" + _ID + ") ON DELETE CASCADE)";
+
+        db.execSQL(creatTablaRegistroAlertas);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + Estructura.EstructuraContacto.NOMBRE_TABLA);
         db.execSQL("DROP TABLE IF EXISTS " + Estructura.EstructuraContacto.NOMBRE_TABLA);
+        db.execSQL("DROP TABLE IF EXISTS " + Estructura.EstructuraRegistro.NOMBRE_TABLA);
         onCreate(db);
     }
 }

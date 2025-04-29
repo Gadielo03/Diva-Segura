@@ -23,4 +23,14 @@ public class Estructura {
         public static final String COLUMNA_RELACION = "relacion";
         public static final String COLUMNA_TIPO_CONTACTO = "tipo_contacto";
     }
+
+    // Tabla de Registro de Alertas
+    public static abstract class EstructuraRegistro implements BaseColumns {
+        public static final String NOMBRE_TABLA = "RegistroAlertas";
+        public static final String COLUMNA_USUARIO_ID = "usuario_id";
+        public static final String COLUMNA_FECHA = "fecha";
+        public static final String COLUMNA_LATITUD = "latitud";
+        public static final String COLUMNA_LONGITUD = "longitud";
+        public static final String COLUMNA_FOTOGRAFIA = "fotografia";
+    }
 }
