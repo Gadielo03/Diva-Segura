@@ -1,6 +1,7 @@
 package com.example.divasegura.activities;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,8 +13,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+
+import android.Manifest;
+import android.content.pm.PackageManager;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.divasegura.controladores.ContactoController;
 import com.example.divasegura.controladores.UsuariosController;
@@ -56,6 +65,7 @@ import com.example.divasegura.fragments.MainScreenFragment;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private static final int SMS_PERMISSION_REQUEST_CODE = 100;
     private Intent locationServiceIntent;
     private Usuario usuario;
     private Contacto contacto1,contacto2;
@@ -178,6 +188,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
 public void triggerEmergencyAlert() {
+         if (!checkSmsPermission()) {
+            return; // Will request permission and return
+        }
     // Get current location
     LocationTracker tracker = new LocationTracker();
     Location currentLocation = tracker.getLastLocation();
@@ -237,5 +250,33 @@ private void startLocationSharing(int minutes) {
         Toast.makeText(this, "Compartición de ubicación finalizada",
                       Toast.LENGTH_SHORT).show();
     }, minutes * 60 * 1000);
+}
+
+private boolean checkSmsPermission() {
+    if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
+            != PackageManager.PERMISSION_GRANTED) {
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.SEND_SMS},
+                SMS_PERMISSION_REQUEST_CODE);
+        return false;
+    }
+    return true;
+}
+
+@Override
+public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                      @NonNull int[] grantResults) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+    if (requestCode == SMS_PERMISSION_REQUEST_CODE) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            // Permission was granted
+            triggerEmergencyAlert();
+        } else {
+            // Permission denied
+            Toast.makeText(this, "Se requiere permiso para enviar mensajes de emergencia",
+                    Toast.LENGTH_LONG).show();
+        }
+    }
 }
 }
