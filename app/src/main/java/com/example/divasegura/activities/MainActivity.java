@@ -26,6 +26,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.divasegura.controladores.ContactoController;
 import com.example.divasegura.controladores.UsuariosController;
+import com.example.divasegura.fragments.InformationFragment;
 import com.example.divasegura.modelos.Contacto;
 import com.google.android.material.navigation.NavigationView;
 import android.view.MenuItem;
@@ -98,10 +99,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Set up navigation view
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.nav_home);
 
         // Set up ViewPager
         viewPager = findViewById(R.id.viewPager);
         setupViewPager();
+         viewPager.setCurrentItem(0);
 
         usuariosController = new UsuariosController(this);
         contactoController = new ContactoController(this);
@@ -149,6 +152,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setupViewPager() {
         viewPagerAdapter = new ViewPagerAdapter(this);
         viewPagerAdapter.addFragment(MainScreenFragment.newInstance());
+        viewPagerAdapter.addFragment(new InformationFragment()); // Añadir el fragmento de información
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.setUserInputEnabled(false); // Disable swiping if needed
     }
@@ -165,27 +169,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-                int id = item.getItemId();
+        int id = item.getItemId();
 
-                // Crear un diccionario de mensajes
-                Map<Integer, String> mensajes = new HashMap<>();
-                mensajes.put(R.id.nav_info, "Información");
-                mensajes.put(R.id.nav_config, "Configuración");
-                mensajes.put(R.id.nav_alerts, "Alertas");
-                mensajes.put(R.id.nav_photo, "Tomar foto");
-                mensajes.put(R.id.nav_terms, "Términos y condiciones");
-                mensajes.put(R.id.nav_privacy, "Aviso de privacidad");
+        // Crear un diccionario de mensajes
+        Map<Integer, String> mensajes = new HashMap<>();
+        mensajes.put(R.id.nav_home, "Inicio");
+        mensajes.put(R.id.nav_info, "Información");
+        mensajes.put(R.id.nav_config, "Configuración");
+        mensajes.put(R.id.nav_alerts, "Alertas");
+        mensajes.put(R.id.nav_photo, "Tomar foto");
+        mensajes.put(R.id.nav_terms, "Términos y condiciones");
+        mensajes.put(R.id.nav_privacy, "Aviso de privacidad");
 
-                // Obtener el mensaje correspondiente al id
-                String mensaje = mensajes.get(id);
-
-                if (mensaje != null) {
-                    Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
-                }
-
-                drawerLayout.closeDrawer(GravityCompat.START);
-                return true;
+        // Manejar navegación entre fragmentos
+        if (id == R.id.nav_home) {
+            viewPager.setCurrentItem(0); // Índice del MainScreenFragment
+        } else if (id == R.id.nav_info) {
+            viewPager.setCurrentItem(1); // Índice del InformationFragment
+        } else {
+            // Obtener el mensaje correspondiente al id
+            String mensaje = mensajes.get(id);
+            if (mensaje != null) {
+                Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
             }
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+     }
 
 public void triggerEmergencyAlert() {
          if (!checkSmsPermission()) {
