@@ -26,7 +26,6 @@ import androidx.fragment.app.Fragment;
 
 import com.example.divasegura.R;
 import com.example.divasegura.activities.WelcomeActivity;
-import com.example.divasegura.controladores.CRUDHelper;
 import com.example.divasegura.controladores.ContactoController;
 import com.example.divasegura.controladores.UsuariosController;
 
@@ -60,7 +59,7 @@ public class UserInfoFragment extends Fragment {
         etNombre = view.findViewById(R.id.etNombreUsuario);
         etDomicilio = view.findViewById(R.id.etDomicilioUsuario);
         btnNext = view.findViewById(R.id.btnNext1);
-        btnTakePhoto = view.findViewById(R.id.btnTakePhoto);
+        btnTakePhoto = view.findViewById(R.id.btnChangePhotoConfig);
         ivPreviewPhoto = view.findViewById(R.id.ivPreviewPhoto);
 
         usuariosController = new UsuariosController(this.getContext());
