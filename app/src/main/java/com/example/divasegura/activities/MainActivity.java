@@ -116,8 +116,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
          contacto1 = contactoController.obtenerContactoUnico(1);
          contacto2 = contactoController.obtenerContactoUnico(2);
 
-        Alert alert911 = new Alert(MainActivity.this);
-        //alert911.call911();
          startLocationTracking();
     }
 
@@ -226,10 +224,6 @@ public void triggerEmergencyAlert() {
         sendSMS(contacto2.getNumero(), emergencyMessage);
     }
 
-    // Call emergency services (911)
-    Alert alert911 = new Alert(MainActivity.this);
-    alert911.call911();
-
     // Extension: Start continuous location sharing for 30 minutes
     startLocationSharing(30);
 
@@ -258,7 +252,7 @@ private void startLocationSharing(int minutes) {
     // Schedule to stop location sharing after specified time
     new Handler().postDelayed(() -> {
         stopService(extendedLocationIntent);
-        Toast.makeText(this, "Compartición de ubicación finalizada",
+        Toast.makeText(this, "Compartir ubicación finalizada",
                       Toast.LENGTH_SHORT).show();
     }, minutes * 60 * 1000);
 }
