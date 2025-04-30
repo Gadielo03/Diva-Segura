@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.telephony.SmsManager;
+import android.util.Pair;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -27,6 +28,8 @@ import androidx.core.content.ContextCompat;
 
 import com.example.divasegura.controladores.ContactoController;
 import com.example.divasegura.controladores.UsuariosController;
+import com.example.divasegura.fragments.ConfigurationEmergencyContactsFragment;
+import com.example.divasegura.fragments.ConfigurationFragment;
 import com.example.divasegura.fragments.InformationFragment;
 import com.example.divasegura.modelos.Contacto;
 import com.google.android.material.navigation.NavigationView;
@@ -232,6 +235,8 @@ public class MainActivity extends AppCompatActivity
         viewPagerAdapter = new ViewPagerAdapter(this);
         viewPagerAdapter.addFragment(MainScreenFragment.newInstance());
         viewPagerAdapter.addFragment(new InformationFragment()); // Añadir el fragmento de información
+        viewPagerAdapter.addFragment(new ConfigurationEmergencyContactsFragment());
+        viewPagerAdapter.addFragment(new ConfigurationFragment()); // Añadir el fragmento de configuración
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.setUserInputEnabled(false); // Disable swiping if needed
     }
@@ -250,26 +255,27 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        // Crear un diccionario de mensajes
-        Map<Integer, String> mensajes = new HashMap<>();
-        mensajes.put(R.id.nav_home, "Inicio");
-        mensajes.put(R.id.nav_info, "Información");
-        mensajes.put(R.id.nav_config, "Configuración");
-        mensajes.put(R.id.nav_alerts, "Alertas");
-        mensajes.put(R.id.nav_photo, "Tomar foto");
-        mensajes.put(R.id.nav_terms, "Términos y condiciones");
-        mensajes.put(R.id.nav_privacy, "Aviso de privacidad");
+      // Crear un diccionario de mensajes con índices
+        Map<Integer, Pair<Integer, String>> mensajes = new HashMap<>();
+        mensajes.put(R.id.nav_home, new Pair<>(0, "Inicio"));
+        mensajes.put(R.id.nav_info, new Pair<>(1, "Información"));
+        mensajes.put(R.id.nav_config_emergency_contacts, new Pair<>(2, "Configuración"));
+        mensajes.put(R.id.nav_config_user, new Pair<>(3, "Configuración"));
+        mensajes.put(R.id.nav_alerts, new Pair<>(-1, "Alertas"));
+        mensajes.put(R.id.nav_photo, new Pair<>(-1, "Tomar foto"));
+        mensajes.put(R.id.nav_terms, new Pair<>(-1, "Términos y condiciones"));
+        mensajes.put(R.id.nav_privacy, new Pair<>(-1, "Aviso de privacidad"));
 
         // Manejar navegación entre fragmentos
-        if (id == R.id.nav_home) {
-            viewPager.setCurrentItem(0); // Índice del MainScreenFragment
-        } else if (id == R.id.nav_info) {
-            viewPager.setCurrentItem(1); // Índice del InformationFragment
-        } else {
-            // Obtener el mensaje correspondiente al id
-            String mensaje = mensajes.get(id);
-            if (mensaje != null) {
-                Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
+        Pair<Integer, String> datos = mensajes.get(id);
+        if (datos != null) {
+            int indice = datos.first;
+            String mensaje = datos.second;
+
+            if (indice >= 0) {
+                viewPager.setCurrentItem(indice); // Cambiar al fragmento correspondiente
+            } else {
+                Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show(); // Mostrar mensaje
             }
         }
 

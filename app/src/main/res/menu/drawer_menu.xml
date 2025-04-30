@@ -13,11 +13,18 @@
             android:title="Información" />
     </group>
 
+    <group android:id="@+id/group8" android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_config_emergency_contacts"
+            android:icon="@drawable/ic_settings"
+            android:title="Configuracion Contacto" />
+    </group>
+
     <group android:id="@+id/group2" android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_config"
+            android:id="@+id/nav_config_user"
             android:icon="@drawable/ic_settings"
-            android:title="Configuración" />
+            android:title="Configuración Usuario" />
     </group>
 
     <group android:id="@+id/group3" android:checkableBehavior="single">
