@@ -8,7 +8,7 @@
     android:background="#4D017D"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    tools:context=".fragments.InformationFragment">
+    tools:context="fragments.InformationFragment">
 
     <Space
         android:layout_width="wrap_content"
