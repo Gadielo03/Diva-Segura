@@ -1,5 +1,6 @@
 package com.example.divasegura.activities;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -64,8 +65,10 @@ import com.example.divasegura.R;
 import com.example.divasegura.adapters.ViewPagerAdapter;
 import com.example.divasegura.fragments.MainScreenFragment;
 import com.google.android.material.navigation.NavigationView;
+import com.example.divasegura.utils.LocationPermissionHelper;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener, LocationPermissionHelper.PermissionCallback {
     private static final int SMS_PERMISSION_REQUEST_CODE = 100;
     private Intent locationServiceIntent;
     private Usuario usuario;
@@ -76,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActionBarDrawerToggle toggle;
      private ViewPager2 viewPager;
     private ViewPagerAdapter viewPagerAdapter;
+    private LocationPermissionHelper locationPermissionHelper;
 
      @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +120,84 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
          contacto1 = contactoController.obtenerContactoUnico(1);
          contacto2 = contactoController.obtenerContactoUnico(2);
 
+         locationPermissionHelper = new LocationPermissionHelper(this, this);
+         requestLocationPermissionOnStart();
+    }
+
+    private void requestLocationPermissionOnStart() {
+         if(ActivityCompat.shouldShowRequestPermissionRationale(this,
+                 Manifest.permission.ACCESS_FINE_LOCATION)) {
+             showLocationRationaleDialog();
+         } else {
+             locationPermissionHelper.checkLocationPermission();
+         }
+    }
+
+    private void showLocationRationaleDialog() {
+         new AlertDialog.Builder(this)
+                 .setTitle("Permiso de ubicación requerida")
+                 .setMessage("Diva-Segura necesita acceso a su ubicación para enviar alertas de emergencia.")
+                 .setPositiveButton("OK", (dialog, which) -> {
+                     locationPermissionHelper.checkLocationPermission();
+                 })
+                 .setNegativeButton("Later", (dialog, which) -> {
+                     proceedWithoutLocation();
+                 })
+                 .setCancelable(false)
+                 .show();
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Handle Location Permission Result
+        if (requestCode == LocationPermissionHelper.REQUEST_LOCATION_PERMISSION) {
+            locationPermissionHelper.onRequestPermissionsResult(requestCode, grantResults);
+        }
+        // Handle SMS Permission Result
+        else if (requestCode == SMS_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                triggerEmergencyAlert();
+            } else {
+                Toast.makeText(this,
+                        "Se requiere permiso para enviar mensajes de emergencia",
+                        Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    @Override
+    public void onPermissionGranted() {
+        startLocationService();
+        proceedWithApp();
+    }
+
+    @Override
+    public void onPermissionDenied() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)) {
+            showLocationRationaleDialog();
+        } else {
+            proceedWithoutLocation();
+        }
+    }
+
+    private void proceedWithApp() {
+         Toast.makeText(this, "Permiso de ubicación concedido", Toast.LENGTH_SHORT).show();
          startLocationTracking();
+    }
+
+    private void proceedWithoutLocation() {
+         Toast.makeText(this, "Ubicación no disponible, es obligatorio para usar Diva-Segura", Toast.LENGTH_SHORT).show();
+         requestLocationPermissionOnStart();
+    }
+
+    private void startLocationService() {
+        Intent serviceIntent = new Intent(this, LocationTracker.class);
+        ContextCompat.startForegroundService(this, serviceIntent);
     }
 
     private void startLocationTracking() {
@@ -196,92 +277,77 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
      }
 
-public void triggerEmergencyAlert() {
-         if (!checkSmsPermission()) {
-            return; // Will request permission and return
+    public void triggerEmergencyAlert() {
+             if (!checkSmsPermission()) {
+                return; // Will request permission and return
+            }
+        // Get current location
+        LocationTracker tracker = new LocationTracker();
+        Location currentLocation = tracker.getLastLocation();
+
+        // Prepare emergency message with location
+        String locationText = "No hay ubicación disponible";
+        if (currentLocation != null) {
+            locationText = "https://maps.google.com/?q=" +
+                          currentLocation.getLatitude() + "," +
+                          currentLocation.getLongitude();
         }
-    // Get current location
-    LocationTracker tracker = new LocationTracker();
-    Location currentLocation = tracker.getLastLocation();
 
-    // Prepare emergency message with location
-    String locationText = "No hay ubicación disponible";
-    if (currentLocation != null) {
-        locationText = "https://maps.google.com/?q=" +
-                      currentLocation.getLatitude() + "," +
-                      currentLocation.getLongitude();
+        String emergencyMessage = "ALERTA DE EMERGENCIA: " + usuario.getNombre() +
+                                 " está en peligro. Ubicación: " + locationText;
+
+        // Send message to registered contacts
+        if (contacto1 != null && contacto1.getNumero() != null) {
+            sendSMS(contacto1.getNumero(), emergencyMessage);
+        }
+
+        if (contacto2 != null && contacto2.getNumero() != null) {
+            sendSMS(contacto2.getNumero(), emergencyMessage);
+        }
+
+        // Extension: Start continuous location sharing for 30 minutes
+        startLocationSharing(30);
+
+        // Display confirmation
+        Toast.makeText(this, "Alerta de emergencia enviada", Toast.LENGTH_LONG).show();
     }
 
-    String emergencyMessage = "ALERTA DE EMERGENCIA: " + usuario.getNombre() +
-                             " está en peligro. Ubicación: " + locationText;
-
-    // Send message to registered contacts
-    if (contacto1 != null && contacto1.getNumero() != null) {
-        sendSMS(contacto1.getNumero(), emergencyMessage);
-    }
-
-    if (contacto2 != null && contacto2.getNumero() != null) {
-        sendSMS(contacto2.getNumero(), emergencyMessage);
-    }
-
-    // Extension: Start continuous location sharing for 30 minutes
-    startLocationSharing(30);
-
-    // Display confirmation
-    Toast.makeText(this, "Alerta de emergencia enviada", Toast.LENGTH_LONG).show();
-}
-
-private void sendSMS(String phoneNumber, String message) {
-    try {
-        SmsManager smsManager = SmsManager.getDefault();
-        ArrayList<String> parts = smsManager.divideMessage(message);
-        smsManager.sendMultipartTextMessage(phoneNumber, null, parts, null, null);
-    } catch (Exception e) {
-        Toast.makeText(this, "Error al enviar mensaje: " + e.getMessage(),
-                      Toast.LENGTH_SHORT).show();
-        e.printStackTrace();
-    }
-}
-
-private void startLocationSharing(int minutes) {
-    // Create intent for extended location sharing
-    Intent extendedLocationIntent = new Intent(this, LocationTracker.class);
-    extendedLocationIntent.putExtra("SHARING_DURATION", minutes * 60 * 1000); // Convert to milliseconds
-    startService(extendedLocationIntent);
-
-    // Schedule to stop location sharing after specified time
-    new Handler().postDelayed(() -> {
-        stopService(extendedLocationIntent);
-        Toast.makeText(this, "Compartir ubicación finalizada",
-                      Toast.LENGTH_SHORT).show();
-    }, minutes * 60 * 1000);
-}
-
-private boolean checkSmsPermission() {
-    if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
-            != PackageManager.PERMISSION_GRANTED) {
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.SEND_SMS},
-                SMS_PERMISSION_REQUEST_CODE);
-        return false;
-    }
-    return true;
-}
-
-@Override
-public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                      @NonNull int[] grantResults) {
-    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-    if (requestCode == SMS_PERMISSION_REQUEST_CODE) {
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            // Permission was granted
-            triggerEmergencyAlert();
-        } else {
-            // Permission denied
-            Toast.makeText(this, "Se requiere permiso para enviar mensajes de emergencia",
-                    Toast.LENGTH_LONG).show();
+    private void sendSMS(String phoneNumber, String message) {
+        try {
+            SmsManager smsManager = SmsManager.getDefault();
+            ArrayList<String> parts = smsManager.divideMessage(message);
+            smsManager.sendMultipartTextMessage(phoneNumber, null, parts, null, null);
+        } catch (Exception e) {
+            Toast.makeText(this, "Error al enviar mensaje: " + e.getMessage(),
+                          Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
         }
     }
-}
+
+    private void startLocationSharing(int minutes) {
+        // Create intent for extended location sharing
+        Intent extendedLocationIntent = new Intent(this, LocationTracker.class);
+        extendedLocationIntent.putExtra("SHARING_DURATION", minutes * 60 * 1000); // Convert to milliseconds
+        startService(extendedLocationIntent);
+
+        // Schedule to stop location sharing after specified time
+        new Handler().postDelayed(() -> {
+            stopService(extendedLocationIntent);
+            Toast.makeText(this, "Compartir ubicación finalizada",
+                          Toast.LENGTH_SHORT).show();
+        }, minutes * 60 * 1000);
+    }
+
+    private boolean checkSmsPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.SEND_SMS},
+                    SMS_PERMISSION_REQUEST_CODE);
+            return false;
+        }
+        return true;
+    }
+
+
 }
