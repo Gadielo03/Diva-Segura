@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity
 
     private void proceedWithApp() {
          Toast.makeText(this, "Permiso de ubicación concedido", Toast.LENGTH_SHORT).show();
-         startLocationTracking();
+         startLocationService();
     }
 
     private void proceedWithoutLocation() {
@@ -283,24 +283,27 @@ public class MainActivity extends AppCompatActivity
         return true;
      }
 
+    // app/src/main/java/com/example/divasegura/activities/MainActivity.java
+
     public void triggerEmergencyAlert() {
-             if (!checkSmsPermission()) {
-                return; // Will request permission and return
-            }
+        if (!checkSmsPermission()) {
+            return; // Will request permission and return
+        }
         // Get current location
-        LocationTracker tracker = new LocationTracker();
-        Location currentLocation = tracker.getLastLocation();
+        LocationTracker locationTracker = new LocationTracker(this);
+        locationTracker.onCreate();
+        Location currentLocation =  locationTracker.getLastLocation();
 
         // Prepare emergency message with location
         String locationText = "No hay ubicación disponible";
         if (currentLocation != null) {
             locationText = "https://maps.google.com/?q=" +
-                          currentLocation.getLatitude() + "," +
-                          currentLocation.getLongitude();
+                       currentLocation.getLatitude() + "," +
+                       currentLocation.getLongitude();
         }
 
         String emergencyMessage = "ALERTA DE EMERGENCIA: " + usuario.getNombre() +
-                                 " está en peligro. Ubicación: " + locationText;
+                             " está en peligro. Ubicación: " + locationText;
 
         // Send message to registered contacts
         if (contacto1 != null && contacto1.getNumero() != null) {
