@@ -15,17 +15,16 @@ import androidx.fragment.app.Fragment;
 
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.view.MotionEvent;
-import android.app.Activity;
 
 import com.example.divasegura.R;
+import com.example.divasegura.activities.Alert;
 import com.example.divasegura.activities.MainActivity;
 
 public class MainScreenFragment extends Fragment {
 
     private AppCompatButton btnAlert;
     private ImageButton btnCall;
-    private ImageButton btnLocation;
+    private ImageButton btnSeguridadPublica;
 
     public MainScreenFragment() {
         // Required empty public constructor
@@ -46,12 +45,10 @@ public class MainScreenFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Initialize buttons
         btnAlert = view.findViewById(R.id.btnAlert);
         btnCall = view.findViewById(R.id.btnCall);
-        btnLocation = view.findViewById(R.id.btnLocation);
+        btnSeguridadPublica = view.findViewById(R.id.btnSeguridadPublica);
 
-        // Set up long press listener for alert button with countdown
         btnAlert.setOnTouchListener(new View.OnTouchListener() {
             private Handler handler = new Handler();
             private int holdTimeRequired = 3000; // 3 seconds
@@ -98,11 +95,13 @@ public class MainScreenFragment extends Fragment {
         });
 
         btnCall.setOnClickListener(v -> {
-            // Handle call button press
+            Alert alert = new Alert(getContext());
+            alert.callNumber("tel:8713345900");
         });
 
-        btnLocation.setOnClickListener(v -> {
-            // Handle location button press
+        btnSeguridadPublica.setOnClickListener(v -> {
+            Alert alert = new Alert(getContext());
+            alert.callNumber("tel:7290099");
         });
     }
 
