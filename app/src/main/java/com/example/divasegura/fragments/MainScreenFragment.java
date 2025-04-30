@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import com.example.divasegura.R;
 import com.example.divasegura.activities.Alert;
 import com.example.divasegura.activities.MainActivity;
+import com.example.divasegura.utils.AppPreferences;
 
 public class MainScreenFragment extends Fragment {
 
@@ -108,10 +109,12 @@ public class MainScreenFragment extends Fragment {
         }.start();
 
         // Start taking photos
-        try {
-            alert.startTakingPhotos();
-        } catch (Exception e) {
-            Toast.makeText(getContext(), "Error al iniciar la cámara", Toast.LENGTH_SHORT).show();
+        if(AppPreferences.isAutomaticTakePictureEnabled(this.getContext())){
+            try {
+                 alert.startTakingPhotos();
+            } catch (Exception e) {
+                 Toast.makeText(getContext(), "Error al iniciar la cámara", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
