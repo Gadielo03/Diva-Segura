@@ -43,4 +43,28 @@ public class Contacto {
     public int getTipoContacto() {
         return tipoContacto;
     }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setUsuarioId(long usuarioId) {
+        this.usuarioId = usuarioId;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+    public void setRelacion(String relacion) {
+        this.relacion = relacion;
+    }
+
+    public void setTipoContacto(int tipoContacto) {
+        this.tipoContacto = tipoContacto;
+    }
 }

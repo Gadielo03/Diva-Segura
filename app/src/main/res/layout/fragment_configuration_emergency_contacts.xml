@@ -57,12 +57,12 @@
                     app:boxStrokeWidthFocused="1dp">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etNombreContacto1"
+                        android:id="@+id/etNombreContacto1Config"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="wrap_content"
                         android:hint="Nombre"
                         android:textColor="@color/white"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -75,13 +75,13 @@
                     app:boxStrokeWidthFocused="1dp">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etTelefonoContacto1"
+                        android:id="@+id/etTelefonoContacto1Config"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="wrap_content"
                         android:hint="Teléfono"
                         android:inputType="phone"
                         android:textColor="@color/white"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -93,12 +93,12 @@
                     app:boxStrokeWidthFocused="1dp">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etParentescoContacto1"
+                        android:id="@+id/etParentescoContacto1Config"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="wrap_content"
                         android:hint="Parentesco"
                         android:textColor="@color/white"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -136,12 +136,12 @@
                     app:boxStrokeWidthFocused="1dp">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etNombreContacto2"
+                        android:id="@+id/etNombreContacto2Config"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="wrap_content"
                         android:hint="Nombre"
                         android:textColor="@color/white"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -154,13 +154,13 @@
                     app:boxStrokeWidthFocused="1dp">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etTelefonoContacto2"
+                        android:id="@+id/etTelefonoContacto2Config"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="wrap_content"
                         android:hint="Teléfono"
                         android:inputType="phone"
                         android:textColor="@color/white"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -172,25 +172,28 @@
                     app:boxStrokeWidthFocused="1dp">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etParentescoContacto2"
+                        android:id="@+id/etParentescoContacto2Config"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="wrap_content"
                         android:hint="Parentesco"
                         android:textColor="@color/white"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <!-- Botón de Guardar compacto -->
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGuardarCambiosContactosConfig"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:layout_marginLeft="40dp"
             android:layout_marginTop="16dp"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/button_pink_background"
             android:text="Guardar Cambios"
             android:textSize="26sp"
-            android:background="@drawable/button_pink_background"
             app:cornerRadius="6dp"
-            app:elevation="2dp"/>
+            app:elevation="2dp" />
     </LinearLayout>
 </ScrollView>

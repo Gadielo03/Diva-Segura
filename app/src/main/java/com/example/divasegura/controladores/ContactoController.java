@@ -84,6 +84,34 @@ public class ContactoController {
         );
     }
 
+    public Contacto obtenerContactoPorTipo(long usuarioId, int tipoContacto) {
+        Cursor cursor = database.query(
+                Estructura.EstructuraContacto.NOMBRE_TABLA,
+                new String[]{_ID, COLUMNA_USUARIO_ID, COLUMNA_NOMBRE, COLUMNA_NUMERO, COLUMNA_RELACION},
+                COLUMNA_USUARIO_ID + " = ? AND " + COLUMNA_TIPO_CONTACTO + " = ?",
+                new String[]{String.valueOf(usuarioId), String.valueOf(tipoContacto)},
+                null, null, null
+        );
+
+        if (cursor != null && cursor.moveToFirst()) {
+            Contacto contacto = new Contacto(
+                    cursor.getLong(cursor.getColumnIndexOrThrow(_ID)),
+                    cursor.getLong(cursor.getColumnIndexOrThrow(COLUMNA_USUARIO_ID)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMNA_NOMBRE)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMNA_NUMERO)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMNA_RELACION)),
+                    tipoContacto
+            );
+            cursor.close();
+            return contacto;
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+        return null;
+    }
+
     public int eliminarContacto(long id) {
         return database.delete(
                 Estructura.EstructuraContacto.NOMBRE_TABLA,
