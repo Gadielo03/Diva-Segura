@@ -259,38 +259,8 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- Sección de ayuda -->
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="🚨 ¿RECONOCES ALGUNA DE ESTAS SITUACIONES?"
-                    android:textColor="#D32F2F"
-                    android:textStyle="bold"
-                    android:textSize="16sp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginBottom="8dp"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Si identificas alguna modalidad de violencia, busca ayuda:"
-                    android:textColor="#424242"
-                    android:textSize="14sp"
-                    android:layout_marginBottom="16dp"/>
 
-                <com.google.android.material.button.MaterialButton
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:text="CONTACTAR AYUDA"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold"
-                    app:icon="@drawable/ic_emergency_white"
-                    app:iconGravity="textStart"
-                    app:iconTint="#FFFFFF"
-                    app:backgroundTint="#E91E63"
-                    app:cornerRadius="24dp"
-                    app:strokeColor="#FFFFFF"
-                    app:strokeWidth="1dp"/>
             </LinearLayout>
         </ScrollView>
     </androidx.cardview.widget.CardView>
