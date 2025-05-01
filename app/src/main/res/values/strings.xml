@@ -108,4 +108,18 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+    <string name="titulo_terminos">Términos y Condiciones</string>
+
+    <string name="texto_terminos_completo">
+    🔐 <b>Uso de Localización:</b>\nLa aplicación requiere acceso a tu ubicación únicamente durante emergencias para enviar tu posición exacta a tus contactos.\n\n
+    📱 <b>Envío de SMS:</b>\nAl activar una emergencia, se enviarán mensajes automáticos a tus contactos registrados (costos de SMS aplican según tu plan).\n\n
+    ⚠️ <b>Uso Responsable:</b>\nDiva Segura es para emergencias reales. El mal uso puede tener consecuencias legales.\n\n
+    👮 <b>Autoridades:</b>\nEn situaciones de peligro, la aplicación puede sugerir contacto con policía/local de emergencias.\n\n
+    🌐 <b>Privacidad:</b>\nTu ubicación solo se comparte cuando activas manualmente una alerta.\n\n
+    🛡️ <b>Seguridad:</b>\nLos datos se almacenan localmente en tu dispositivo y no se comparten con terceros.\n\n
+    📅 Última actualización: Enero 2023
+    </string>
+
+    <string name="volver">Volver atrás</string>
 </resources>
