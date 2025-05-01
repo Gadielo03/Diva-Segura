@@ -8,25 +8,32 @@
     tools:context=".fragments.MainScreenFragment">
 
 
-<com.google.android.material.button.MaterialButton
-android:id="@+id/btnBack"
-android:layout_width="wrap_content"
-android:layout_height="48dp"
-android:layout_marginStart="24dp"
-android:layout_marginTop="24dp"
-android:elevation="4dp"
-android:text="VOLVER"
-android:textAllCaps="true"
-android:textColor="#FFFFFF"
-android:textStyle="bold"
-android:drawableStart="@drawable/ic_arrow_back_white"
-android:drawablePadding="8dp"
-app:backgroundTint="#6A1B9A"
-    app:cornerRadius="24dp"
-    app:iconTint="#FFFFFF"
-    app:rippleColor="#9C27B0"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"/>
+    <!-- Botón de volver mejorado -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="VOLVER"
+        android:textAllCaps="true"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.05"
+        android:drawableStart="@drawable/ic_arrow_back_white"
+        android:drawablePadding="8dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:iconTint="#FFFFFF"
+        app:backgroundTint="#6A1B9A"
+        app:cornerRadius="24dp"
+        app:strokeColor="#FFFFFF"
+        app:strokeWidth="1dp"
+        app:rippleColor="#9C27B0"
+        app:elevation="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
 
 <androidx.cardview.widget.CardView

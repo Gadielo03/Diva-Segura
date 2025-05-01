@@ -1,0 +1,24 @@
+<!-- res/drawable/tab_background_inactive.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Pressed state -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#E1BEE7"/>  <!-- Slightly darker when pressed -->
+            <stroke
+                android:width="1.5dp"
+                android:color="#7B1FA2"/>  <!-- Darker purple border -->
+            <corners android:radius="20dp"/>
+        </shape>
+    </item>
+
+    <!-- Default inactive state -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#F3E5F5"/>
+            <stroke
+                android:width="1.5dp"
+                android:color="#6A1B9A"/>
+            <corners android:radius="20dp"/>
+        </shape>
+    </item>
+</selector>

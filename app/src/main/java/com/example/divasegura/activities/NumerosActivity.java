@@ -7,11 +7,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.divasegura.R;
 import com.google.android.material.button.MaterialButton;
 
-public class ViolentometroActivity extends AppCompatActivity {
+public class NumerosActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_violento);
+        setContentView(R.layout.activity_numeros);
 
         // Find the back button from your layout
         MaterialButton btnBack = findViewById(R.id.btnBack);
