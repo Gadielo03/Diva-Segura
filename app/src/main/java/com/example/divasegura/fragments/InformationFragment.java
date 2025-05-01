@@ -1,5 +1,6 @@
 package com.example.divasegura.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.divasegura.R;
 
@@ -39,11 +41,11 @@ public class InformationFragment extends Fragment {
         btnTiposDeViolencia = view.findViewById(R.id.btnTiposDeViolencia);
         btnAlerta = view.findViewById(R.id.btnAlerta);
 
-        // Configurar listeners
-        btnViolentometro.setOnClickListener(v -> {
-            // Acción del botón
-        });
 
+        btnViolentometro.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), com.example.divasegura.activities.ViolentometroActivity.class);
+            startActivity(intent);
+        });
         // Configura los demás listeners de manera similar
     }
 }
