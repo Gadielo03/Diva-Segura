@@ -27,10 +27,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.divasegura.controladores.ContactoController;
+import com.example.divasegura.controladores.RegistroAlertaController;
 import com.example.divasegura.controladores.UsuariosController;
 import com.example.divasegura.fragments.ConfigurationEmergencyContactsFragment;
 import com.example.divasegura.fragments.ConfigurationFragment;
 import com.example.divasegura.fragments.InformationFragment;
+import com.example.divasegura.fragments.RegistroAlertasFragment;
 import com.example.divasegura.modelos.Contacto;
 import com.google.android.material.navigation.NavigationView;
 import android.view.MenuItem;
@@ -78,11 +80,14 @@ public class MainActivity extends AppCompatActivity
     private Contacto contacto1,contacto2;
     private ContactoController contactoController;
     private UsuariosController usuariosController;
+    private RegistroAlertaController registroAlertaController;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
-     private ViewPager2 viewPager;
+    private ViewPager2 viewPager;
     private ViewPagerAdapter viewPagerAdapter;
     private LocationPermissionHelper locationPermissionHelper;
+    public Double latitud;
+    public Double longitud;
 
      @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,8 +120,10 @@ public class MainActivity extends AppCompatActivity
 
         usuariosController = new UsuariosController(this);
         contactoController = new ContactoController(this);
+        registroAlertaController = new RegistroAlertaController(this);
         usuariosController.open();
         contactoController.open();
+        registroAlertaController.open();
 
         // Get user data
          usuario = usuariosController.obtenerUsuarioUnico();
@@ -237,6 +244,7 @@ public class MainActivity extends AppCompatActivity
         viewPagerAdapter.addFragment(new InformationFragment()); // Añadir el fragmento de información
         viewPagerAdapter.addFragment(new ConfigurationEmergencyContactsFragment());
         viewPagerAdapter.addFragment(new ConfigurationFragment()); // Añadir el fragmento de configuración
+        viewPagerAdapter.addFragment(new RegistroAlertasFragment()); // Añadir el fragmento de configuración
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.setUserInputEnabled(false); // Disable swiping if needed
     }
@@ -261,7 +269,7 @@ public class MainActivity extends AppCompatActivity
         mensajes.put(R.id.nav_info, new Pair<>(1, "Información"));
         mensajes.put(R.id.nav_config_emergency_contacts, new Pair<>(2, "Configuración"));
         mensajes.put(R.id.nav_config_user, new Pair<>(3, "Configuración"));
-        mensajes.put(R.id.nav_alerts, new Pair<>(-1, "Alertas"));
+        mensajes.put(R.id.nav_alerts, new Pair<>(4, "Alertas"));
         mensajes.put(R.id.nav_photo, new Pair<>(-1, "Tomar foto"));
         mensajes.put(R.id.nav_terms, new Pair<>(-1, "Términos y condiciones"));
         mensajes.put(R.id.nav_privacy, new Pair<>(-1, "Aviso de privacidad"));
@@ -300,6 +308,8 @@ public class MainActivity extends AppCompatActivity
             locationText = "https://maps.google.com/?q=" +
                        currentLocation.getLatitude() + "," +
                        currentLocation.getLongitude();
+            latitud = currentLocation.getLatitude();
+            longitud = currentLocation.getLongitude();
         }
 
         String emergencyMessage = "ALERTA DE EMERGENCIA: " + usuario.getNombre() +
