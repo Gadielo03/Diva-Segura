@@ -36,6 +36,7 @@ public class Alert {
     private Context context;
     private static final int REQUEST_CALL_PERMISSION = 1;
     private static final int REQUEST_CAMERA_PERMISSION = 2;
+    public String PhotoPath;
 
     // Camera components
     private CameraDevice cameraDevice;
@@ -186,6 +187,9 @@ public class Alert {
         File storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File photoFile = new File(storageDir, "IMG_" + timeStamp + ".jpg");
+
+        PhotoPath = photoFile.getAbsolutePath();
+
 
         try (FileOutputStream output = new FileOutputStream(photoFile)) {
             output.write(bytes);

@@ -20,7 +20,13 @@ import androidx.fragment.app.Fragment;
 import com.example.divasegura.R;
 import com.example.divasegura.activities.Alert;
 import com.example.divasegura.activities.MainActivity;
+import com.example.divasegura.controladores.RegistroAlertaController;
+import com.example.divasegura.controladores.UsuariosController;
+import com.example.divasegura.modelos.Usuario;
 import com.example.divasegura.utils.AppPreferences;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MainScreenFragment extends Fragment {
 
@@ -35,7 +41,12 @@ public class MainScreenFragment extends Fragment {
     private String originalAlertButtonText;
     private boolean isCountingDown = false;
     private static final int HOLD_TIME_REQUIRED = 2800; // 3 seconds
-
+    private String lastPhotoPath;
+    private RegistroAlertaController registroAlertaController;
+    private UsuariosController usuariosController;
+    private Usuario usuario;
+    public double latitud;
+    public double longitud;
     public MainScreenFragment() {
         // Required empty public constructor
     }
@@ -63,6 +74,12 @@ public class MainScreenFragment extends Fragment {
         // Initialize helper objects
         handler = new Handler(Looper.getMainLooper());
         alert = new Alert(getContext());
+
+        registroAlertaController = new RegistroAlertaController(this.getContext());
+        usuariosController = new UsuariosController(this.getContext());
+        usuariosController.open();
+        registroAlertaController.open();
+        usuario = usuariosController.obtenerUsuarioUnico();
 
         // Set up button listeners
         setupAlertButton();
@@ -112,6 +129,7 @@ public class MainScreenFragment extends Fragment {
         if(AppPreferences.isAutomaticTakePictureEnabled(this.getContext())){
             try {
                  alert.startTakingPhotos();
+                 lastPhotoPath = alert.PhotoPath;
             } catch (Exception e) {
                  Toast.makeText(getContext(), "Error al iniciar la cámara", Toast.LENGTH_SHORT).show();
             }
@@ -127,9 +145,11 @@ public class MainScreenFragment extends Fragment {
 
         try {
             alert.stopTakingPhotos();
+            lastPhotoPath = alert.PhotoPath;
         } catch (Exception e) {
             // Silent handling - already stopping
         }
+        guardarRegistroAlerta();
     }
 
     private void setupCallButtons() {
@@ -147,7 +167,10 @@ public class MainScreenFragment extends Fragment {
         if (activity instanceof MainActivity) {
             MainActivity mainActivity = (MainActivity) activity;
             mainActivity.triggerEmergencyAlert();
+            latitud = mainActivity.latitud;
+            longitud = mainActivity.longitud;
         }
+
     }
 
     @Override
@@ -161,6 +184,43 @@ public class MainScreenFragment extends Fragment {
             alert.stopTakingPhotos();
         } catch (Exception e) {
             // Silent cleanup
+        }
+    }
+
+    public boolean guardarRegistroAlerta(){
+        // Crear un formato para la fecha
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        long id;
+
+        // Obtener la fecha actual
+        Date date = new Date();
+
+        // Convertir la fecha a String
+        String fechaActual = dateFormat.format(date);
+
+        if(AppPreferences.isAutomaticTakePictureEnabled(this.getContext())) {
+            id = registroAlertaController.insertarRegistroAlertaConFoto(
+                    usuario.getId(),
+                    fechaActual,
+                    latitud,
+                    longitud,
+                    lastPhotoPath
+            );
+        }
+        else {
+            id = registroAlertaController.insertarRegistroAlertaSinFoto(
+                    usuario.getId(),
+                    fechaActual,
+                    latitud,
+                    longitud
+            );
+        }
+        if (id != -1) {
+            Toast.makeText(getActivity(), "Información guardada correctamente", Toast.LENGTH_SHORT).show();
+            return true;
+        } else {
+            Toast.makeText(getActivity(), "Error al guardar la información", Toast.LENGTH_SHORT).show();
+            return false;
         }
     }
 }

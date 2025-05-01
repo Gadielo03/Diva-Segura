@@ -1,11 +1,22 @@
 package com.example.divasegura.controladores;
 
+import static android.provider.BaseColumns._ID;
+import static com.example.divasegura.modelos.Estructura.EstructuraUsuario.COLUMNA_DOMICILIO;
+import static com.example.divasegura.modelos.Estructura.EstructuraUsuario.COLUMNA_NOMBRE;
+import static com.example.divasegura.modelos.Estructura.EstructuraUsuario.COLUMNA_NUMERO;
+import static com.example.divasegura.modelos.Estructura.EstructuraUsuario.COLUMNA_RUTA_FOTO;
+import static com.example.divasegura.modelos.Estructura.EstructuraUsuario.NOMBRE_TABLA;
+
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.divasegura.modelos.Estructura;
+import com.example.divasegura.modelos.RegistroAlerta;
 import com.example.divasegura.utils.CrearBD;
+
+import java.util.ArrayList;
 
 public class RegistroAlertaController {
     private CrearBD dbHelper;
@@ -54,6 +65,36 @@ public class RegistroAlertaController {
     public long eliminarRegistro(long registroID){
         return database.delete(Estructura.EstructuraRegistro.NOMBRE_TABLA,
                 Estructura.EstructuraRegistro._ID + " = ?", new String[]{String.valueOf(registroID)});
+    }
+
+    public ArrayList<RegistroAlerta> obtenerTodosLosRegistros(){
+        Cursor cursor = database.query(
+                Estructura.EstructuraRegistro.NOMBRE_TABLA,
+                new String[]{_ID,
+                        Estructura.EstructuraRegistro.COLUMNA_USUARIO_ID,
+                        Estructura.EstructuraRegistro.COLUMNA_FECHA,
+                        Estructura.EstructuraRegistro.COLUMNA_LATITUD,
+                        Estructura.EstructuraRegistro.COLUMNA_LONGITUD,
+                        Estructura.EstructuraRegistro.COLUMNA_FOTOGRAFIA},
+                null, null, null, null, null
+        );
+
+        ArrayList<RegistroAlerta> listaRegistros = new ArrayList<>();
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                RegistroAlerta registro = new RegistroAlerta(
+                        cursor.getLong(cursor.getColumnIndexOrThrow(_ID)),
+                        cursor.getLong(cursor.getColumnIndexOrThrow(Estructura.EstructuraRegistro.COLUMNA_USUARIO_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Estructura.EstructuraRegistro.COLUMNA_FECHA)),
+                        cursor.getDouble(cursor.getColumnIndexOrThrow(Estructura.EstructuraRegistro.COLUMNA_LATITUD)),
+                        cursor.getDouble(cursor.getColumnIndexOrThrow(Estructura.EstructuraRegistro.COLUMNA_LONGITUD)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Estructura.EstructuraRegistro.COLUMNA_FOTOGRAFIA))
+                );
+                listaRegistros.add(registro);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        return listaRegistros;
     }
 
     public void eliminarTodosRegistros(){
