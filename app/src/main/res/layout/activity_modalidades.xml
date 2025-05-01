@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_background"
-    tools:context=".fragments.MainScreenFragment">
+    android:background="@drawable/gradient_background">
 
     <!-- Botón de volver -->
     <com.google.android.material.button.MaterialButton
@@ -35,27 +34,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <!-- Contenedor principal con ScrollView -->
-    <androidx.core.widget.NestedScrollView
+        <!-- Efecto de sombra interior -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardElevation="0dp"
+            app:cardPreventCornerOverlap="false"
+            app:contentPadding="0dp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/btn_back_inner_shadow"/>
+        </androidx.cardview.widget.CardView>
+
+    <!-- Tarjeta principal -->
+    <androidx.cardview.widget.CardView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:fillViewport="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:cardBackgroundColor="#FFFFFF"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnBack">
 
-        <!-- CardView contenedor -->
-        <androidx.cardview.widget.CardView
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            app:cardBackgroundColor="#FFFFFF"
-            app:cardCornerRadius="24dp"
-            app:cardElevation="12dp">
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -63,53 +76,59 @@
                 android:orientation="vertical"
                 android:padding="24dp">
 
-                <!-- Título -->
+                <!-- Título con gradiente -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/text_gradient"
                     android:gravity="center"
-                    android:padding="8dp"
+                    android:padding="12dp"
                     android:layout_marginBottom="16dp">
 
                     <TextView
-                        android:id="@+id/titleViolentometro"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="VIOLENTÓMETRO"
-                        android:textAllCaps="true"
+                        android:text="MODALIDADES DE VIOLENCIA"
                         android:textColor="#FFFFFF"
-                        android:textSize="28sp"
+                        android:textSize="22sp"
                         android:textStyle="bold"
-                        android:letterSpacing="0.1"/>
+                        android:letterSpacing="0.05"/>
                 </LinearLayout>
 
-                <!-- Descripción -->
-                <LinearLayout
+                <!-- Tarjeta de violencia física -->
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="24dp">
+                    android:layout_marginBottom="12dp"
+                    app:cardBackgroundColor="#FFEBEE"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp">
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_info2"
-                        android:layout_marginEnd="8dp"
-                        app:tint="#6A1B9A" />
-
-                    <TextView
-                        android:id="@+id/descripcionViolentometro"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Identifica los niveles de violencia en tus relaciones con esta herramienta visual:"
-                        android:textColor="#424242"
-                        android:textSize="16sp"
-                        android:textStyle="italic"/>
-                </LinearLayout>
+                        android:orientation="vertical"
+                        android:padding="16dp">
 
-                <!-- Nivel 1 -->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="👊 VIOLENCIA FÍSICA"
+                            android:textColor="#D32F2F"
+                            android:textStyle="bold"
+                            android:textSize="16sp"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="• Golpes, empujones o patadas\n• Uso de armas u objetos\n• Quemaduras o lesiones\n• Restricción física"
+                            android:textColor="#616161"
+                            android:textSize="14sp"
+                            android:layout_marginTop="8dp"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Tarjeta de violencia psicológica -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -127,7 +146,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="🔵 NIVEL 1 - VIOLENCIA SUTIL"
+                            android:text="🧠 VIOLENCIA PSICOLÓGICA"
                             android:textColor="#7B1FA2"
                             android:textStyle="bold"
                             android:textSize="16sp"/>
@@ -135,19 +154,19 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="• Bromas hirientes y humillantes\n• Control de amistades y actividades\n• Descalificaciones y menosprecio"
+                            android:text="• Amenazas e intimidación\n• Humillaciones públicas\n• Control de actividades\n• Aislamiento social"
                             android:textColor="#616161"
                             android:textSize="14sp"
                             android:layout_marginTop="8dp"/>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- Nivel 2 -->
+                <!-- Tarjeta de violencia sexual -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                    app:cardBackgroundColor="#E1BEE7"
+                    app:cardBackgroundColor="#FCE4EC"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="4dp">
 
@@ -160,26 +179,27 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="🟠 NIVEL 2 - VIOLENCIA EVIDENTE"
-                            android:textColor="#D32F2F"
+                            android:text="🚻 VIOLENCIA SEXUAL"
+                            android:textColor="#AD1457"
                             android:textStyle="bold"
                             android:textSize="16sp"/>
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="• Golpes y empujones\n• Amenazas verbales\n• Humillaciones públicas\n• Destrucción de objetos personales"
+                            android:text="• Acoso sexual\n• Violación o abuso\n• Coerción reproductiva\n• Exhibicionismo no consentido"
                             android:textColor="#616161"
                             android:textSize="14sp"
                             android:layout_marginTop="8dp"/>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- Nivel 3 -->
+                <!-- Tarjeta de violencia económica -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardBackgroundColor="#CE93D8"
+                    android:layout_marginBottom="12dp"
+                    app:cardBackgroundColor="#E8F5E9"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="4dp">
 
@@ -192,71 +212,56 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="🔴 NIVEL 3 - VIOLENCIA EXTREMA"
-                            android:textColor="#880E4F"
+                            android:text="💰 VIOLENCIA ECONÓMICA"
+                            android:textColor="#2E7D32"
                             android:textStyle="bold"
                             android:textSize="16sp"/>
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="• Violencia sexual\n• Amenazas con armas\n• Aislamiento total\n• Feminicidio"
+                            android:text="• Control de recursos económicos\n• Impedimento para trabajar\n• Destrucción de bienes\n• Deudas forzadas"
                             android:textColor="#616161"
                             android:textSize="14sp"
                             android:layout_marginTop="8dp"/>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- Sección de ayuda emergente -->
-                <LinearLayout
+                <!-- Tarjeta de violencia digital -->
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@drawable/help_background"
-                    android:padding="16dp"
-                    android:layout_marginTop="24dp">
+                    app:cardBackgroundColor="#E3F2FD"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="🚨 ¿NECESITAS AYUDA?"
-                        android:textColor="#D32F2F"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:layout_marginBottom="8dp"/>
+                        android:orientation="vertical"
+                        android:padding="16dp">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Si identificas violencia en tu relación:"
-                        android:textColor="#424242"
-                        android:textSize="14sp"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="📱 VIOLENCIA DIGITAL"
+                            android:textColor="#1565C0"
+                            android:textStyle="bold"
+                            android:textSize="16sp"/>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Línea Nacional: 800 911 2511"
-                        android:textColor="#E91E63"
-                        android:textStyle="bold"
-                        android:textSize="16sp"
-                        android:layout_marginTop="8dp"
-                        android:drawableStart="@drawable/ic_phone"
-                        android:drawablePadding="8dp"
-                        android:drawableTint="#E91E63"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="• Acoso en redes sociales\n• Control de dispositivos\n• Difusión de contenido íntimo\n• Suplantación de identidad"
+                            android:textColor="#616161"
+                            android:textSize="14sp"
+                            android:layout_marginTop="8dp"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Emergencias: 911"
-                        android:textColor="#E91E63"
-                        android:textStyle="bold"
-                        android:textSize="16sp"
-                        android:layout_marginTop="4dp"
-                        android:drawableStart="@drawable/ic_emergency2"
-                        android:drawablePadding="8dp"
-                        android:drawableTint="#E91E63"/>
-                </LinearLayout>
+
+
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
-    </androidx.core.widget.NestedScrollView>
+        </ScrollView>
+    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

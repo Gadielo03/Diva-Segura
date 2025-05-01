@@ -1,0 +1,21 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="240dp"
+    android:height="135dp"
+    android:viewportWidth="240"
+    android:viewportHeight="135">
+
+    <!-- Fondo del placeholder -->
+    <path
+        android:fillColor="#E1BEE7"
+    android:pathData="M0,0h240v135h-240z"/>
+
+    <!-- Icono de play centrado -->
+    <path
+        android:fillColor="#6A1B9A"
+    android:pathData="M100,45l60,45l-60,45z"/>
+
+    <!-- Texto opcional -->
+    <path
+        android:fillColor="#6A1B9A"
+        android:pathData="M30,115h180v5h-180z"/>  <!-- Barra inferior -->
+</vector>
