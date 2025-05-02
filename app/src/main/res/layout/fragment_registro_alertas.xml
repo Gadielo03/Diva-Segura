@@ -67,6 +67,12 @@
         android:textSize="16sp"
         android:gravity="center"
         android:visibility="gone"/>
-</LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
     </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>

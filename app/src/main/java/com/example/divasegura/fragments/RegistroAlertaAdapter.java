@@ -40,6 +40,9 @@ public class RegistroAlertaAdapter extends RecyclerView.Adapter<RegistroAlertaAd
     public void onBindViewHolder(@NonNull RegistroViewHolder holder, int position) {
         RegistroAlerta registro = registros.get(position);
 
+        if(holder.ultimoRegistroId == registro.getId()) {
+            return; // Evitar duplicados
+        }
         // Formatear fecha (asumiendo que fecha es un timestamp largo o string en formato ISO)
         String[] fechaHora = formatFecha(registro.getFecha()).split(" ");
 
@@ -122,7 +125,7 @@ public class RegistroAlertaAdapter extends RecyclerView.Adapter<RegistroAlertaAd
     public static class RegistroViewHolder extends RecyclerView.ViewHolder {
         TextView tvFecha, tvHora, tvUbicacion, tvTipo;
         ImageView ivFoto;
-
+        long ultimoRegistroId = -1;
         public RegistroViewHolder(@NonNull View itemView) {
             super(itemView);
             tvFecha = itemView.findViewById(R.id.tvFecha);
