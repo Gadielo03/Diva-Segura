@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatActivity
         mensajes.put(R.id.nav_alerts, 5);
         mensajes.put(R.id.nav_photo, 10);
         mensajes.put(R.id.nav_terms, 4);
-        mensajes.put(R.id.nav_privacy, 11);
+        mensajes.put(R.id.nav_privacy, 6);
 
         // Manejar navegación entre fragmentos
         Integer indice = mensajes.get(id);
