@@ -120,9 +120,9 @@ public class ConfigurationEmergencyContactsFragment extends Fragment {
             contacto2.setNumero(etNumeroContacto2.getText().toString());
             contacto2.setRelacion(etParentescoContacto2.getText().toString());
 
-            int res1 = contactoController.actualizarContacto(contacto1.getUsuarioId(),contacto1.getNombre(),contacto1.getNumero(),contacto1.getRelacion());
+            int res1 = contactoController.actualizarContacto(contacto1.getId(),contacto1.getNombre(),contacto1.getNumero(),contacto1.getRelacion());
 
-            int res2 = contactoController.actualizarContacto(contacto2.getUsuarioId(), contacto2.getNombre(), contacto2.getNumero(), contacto2.getRelacion());
+            int res2 = contactoController.actualizarContacto(contacto2.getId(), contacto2.getNombre(), contacto2.getNumero(), contacto2.getRelacion());
 
         return res1 != -1 && res2 != -1 ? true : false;
 

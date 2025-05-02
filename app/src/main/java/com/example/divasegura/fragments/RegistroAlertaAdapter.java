@@ -1,13 +1,18 @@
 package com.example.divasegura.fragments;
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.divasegura.R;
 import com.example.divasegura.modelos.RegistroAlerta;
+
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -47,6 +52,7 @@ public class RegistroAlertaAdapter extends RecyclerView.Adapter<RegistroAlertaAd
         String tipoAlerta = determinarTipoAlerta(registro);
         holder.tvTipo.setText(tipoAlerta);
         holder.tvTipo.setBackgroundResource(obtenerColorFondo(tipoAlerta));
+        mostrarFoto(registro.getFotografia(),holder);
     }
 
     @Override
@@ -91,9 +97,31 @@ public class RegistroAlertaAdapter extends RecyclerView.Adapter<RegistroAlertaAd
         }
     }
 
+    private void mostrarFoto(String imagePath, RegistroViewHolder holder) {
+        if (imagePath == null) {
+            holder.ivFoto.setImageResource(R.drawable.baseline_image_not_supported_24); // Imagen por defecto
+            return;
+        }
+
+        File imgFile = new File(imagePath);
+        if (imgFile.exists()) {
+            // Usa FileProvider para evitar problemas de permisos en Android 7+
+            Uri photoUri = FileProvider.getUriForFile(
+                    context,
+                    context.getPackageName() + ".provider",
+                    imgFile
+            );
+
+            holder.ivFoto.setImageURI(photoUri);
+        } else {
+            holder.ivFoto.setImageResource(R.drawable.ic_launcher_background);
+        }
+    }
+
     // ViewHolder
     public static class RegistroViewHolder extends RecyclerView.ViewHolder {
         TextView tvFecha, tvHora, tvUbicacion, tvTipo;
+        ImageView ivFoto;
 
         public RegistroViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -101,6 +129,7 @@ public class RegistroAlertaAdapter extends RecyclerView.Adapter<RegistroAlertaAd
             tvHora = itemView.findViewById(R.id.tvHora);
             tvUbicacion = itemView.findViewById(R.id.tvUbicacion);
             tvTipo = itemView.findViewById(R.id.tvTipo);
+            ivFoto = itemView.findViewById(R.id.ivFoto);
         }
     }
 }

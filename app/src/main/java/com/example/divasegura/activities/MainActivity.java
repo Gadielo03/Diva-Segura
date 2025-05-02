@@ -6,27 +6,22 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.telephony.SmsManager;
-import android.util.Pair;
-import android.widget.ImageView;
 import android.widget.Toast;
-import android.view.View;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
-import android.content.pm.PackageManager;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.example.divasegura.controladores.ContactoController;
 import com.example.divasegura.controladores.RegistroAlertaController;
@@ -40,39 +35,26 @@ import com.example.divasegura.modelos.Contacto;
 import com.google.android.material.navigation.NavigationView;
 import android.view.MenuItem;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.example.divasegura.controladores.CRUDHelper;
 import com.example.divasegura.R;
 import com.example.divasegura.modelos.Usuario;
 import com.example.divasegura.services.LocationTracker;
 
-import com.example.divasegura.activities.Alert;
-
 import java.io.File;
+import java.io.IOException;
 import java.sql.SQLOutput;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
-import android.os.Bundle;
-import android.view.MenuItem;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.divasegura.R;
 import com.example.divasegura.adapters.ViewPagerAdapter;
 import com.example.divasegura.fragments.MainScreenFragment;
-import com.google.android.material.navigation.NavigationView;
 import com.example.divasegura.utils.LocationPermissionHelper;
 
 public class MainActivity extends AppCompatActivity
@@ -91,6 +73,10 @@ public class MainActivity extends AppCompatActivity
     private LocationPermissionHelper locationPermissionHelper;
     public Double latitud;
     public Double longitud;
+
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_CAMERA_PERMISSION = 100;
+    private String currentPhotoPath;
 
      @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -247,8 +233,8 @@ public class MainActivity extends AppCompatActivity
         viewPagerAdapter.addFragment(new InformationFragment()); // Añadir el fragmento de información
         viewPagerAdapter.addFragment(new ConfigurationEmergencyContactsFragment());
         viewPagerAdapter.addFragment(new ConfigurationFragment()); // Añadir el fragmento de configuración
-        viewPagerAdapter.addFragment(new RegistroAlertasFragment()); // Añadir el fragmento de configuración
         viewPagerAdapter.addFragment(new TermsFragment());
+        viewPagerAdapter.addFragment(new RegistroAlertasFragment()); // Añadir el fragmento de configuración
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.setUserInputEnabled(false); // Disable swiping if needed
     }
@@ -267,33 +253,29 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-      // Crear un diccionario de mensajes con índices
-        Map<Integer, Pair<Integer, String>> mensajes = new HashMap<>();
-        mensajes.put(R.id.nav_home, new Pair<>(0, "Inicio"));
-        mensajes.put(R.id.nav_info, new Pair<>(1, "Información"));
-        mensajes.put(R.id.nav_config_emergency_contacts, new Pair<>(2, "Configuración"));
-        mensajes.put(R.id.nav_config_user, new Pair<>(3, "Configuración"));
-        mensajes.put(R.id.nav_alerts, new Pair<>(4, "Alertas"));
-        mensajes.put(R.id.nav_photo, new Pair<>(-1, "Tomar foto"));
-        mensajes.put(R.id.nav_terms, new Pair<>(5, "Términos y condiciones"));
-        mensajes.put(R.id.nav_privacy, new Pair<>(-1, "Aviso de privacidad"));
+        // Crear un diccionario de mensajes con índices
+        Map<Integer, Integer> mensajes = new HashMap<>();
+        mensajes.put(R.id.nav_home, 0);
+        mensajes.put(R.id.nav_info, 1);
+        mensajes.put(R.id.nav_config_emergency_contacts, 2);
+        mensajes.put(R.id.nav_config_user, 3);
+        mensajes.put(R.id.nav_alerts, 5);
+        mensajes.put(R.id.nav_photo, 10);
+        mensajes.put(R.id.nav_terms, 4);
+        mensajes.put(R.id.nav_privacy, -1);
 
-        // Manejar navegación entre fragmentos
-        Pair<Integer, String> datos = mensajes.get(id);
-        if (datos != null) {
-            int indice = datos.first;
-            String mensaje = datos.second;
-
-            if (indice >= 0) {
+// Manejar navegación entre fragmentos
+        Integer indice = mensajes.get(id);
+            if (indice >= 0 && indice != 10) {
                 viewPager.setCurrentItem(indice); // Cambiar al fragmento correspondiente
-            } else {
-                Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show(); // Mostrar mensaje
+            } else if (indice == 10) {
+                checkCameraPermission();
+                viewPager.setCurrentItem(0);
             }
-        }
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
-     }
+    }
 
     // app/src/main/java/com/example/divasegura/activities/MainActivity.java
 
@@ -372,5 +354,116 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    private void checkCameraPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA},
+                    REQUEST_CAMERA_PERMISSION);
+        } else {
+            launchCamera();
+        }
+    }
 
+    private void launchCamera() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                Toast.makeText(this, "Error al crear el archivo", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        getPackageName() + ".provider",
+                        photoFile);
+
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+        File imageFile = File.createTempFile(
+                imageFileName,
+                ".jpg",
+                storageDir
+        );
+
+        currentPhotoPath = imageFile.getAbsolutePath();
+        return imageFile;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            // La foto se tomó correctamente
+            Toast.makeText(this, "Foto capturada correctamente", Toast.LENGTH_SHORT).show();
+
+            // Ahora enviar alerta de emergencia
+            triggerEmergencyAlert();
+
+            // Guardar el registro de alerta con la foto
+            guardarRegistroAlertaConFoto();
+        } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            // La captura fue cancelada
+            Toast.makeText(this, "Captura de foto cancelada", Toast.LENGTH_SHORT).show();
+
+            // Eliminar archivo temporal si existe
+            if (currentPhotoPath != null) {
+                File photoFile = new File(currentPhotoPath);
+                if (photoFile.exists()) {
+                    photoFile.delete();
+                }
+                currentPhotoPath = null;
+            }
+        }
+    }
+
+    private void guardarRegistroAlertaConFoto() {
+        try {
+            // Verificar que la ruta de la foto existe
+            if (currentPhotoPath == null || currentPhotoPath.isEmpty()) {
+                Toast.makeText(this, "No hay imagen para guardar", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Crear formato para la fecha
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+
+            // Obtener fecha actual
+            Date date = new Date();
+
+            // Convertir fecha a String
+            String fechaActual = dateFormat.format(date);
+
+            // Insertar registro con foto
+            long id = registroAlertaController.insertarRegistroAlertaConFoto(
+                    usuario.getId(),
+                    fechaActual,
+                    latitud,
+                    longitud,
+                    currentPhotoPath
+            );
+
+            if (id != -1) {
+                Toast.makeText(this, "Alerta con foto guardada correctamente", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Error al guardar la alerta con foto", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
 }
