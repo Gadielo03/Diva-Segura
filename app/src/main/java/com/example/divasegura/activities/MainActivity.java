@@ -11,6 +11,8 @@ import android.telephony.SmsManager;
 import android.util.Pair;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -33,6 +35,7 @@ import com.example.divasegura.fragments.ConfigurationEmergencyContactsFragment;
 import com.example.divasegura.fragments.ConfigurationFragment;
 import com.example.divasegura.fragments.InformationFragment;
 import com.example.divasegura.fragments.RegistroAlertasFragment;
+import com.example.divasegura.fragments.TermsFragment;
 import com.example.divasegura.modelos.Contacto;
 import com.google.android.material.navigation.NavigationView;
 import android.view.MenuItem;
@@ -83,7 +86,7 @@ public class MainActivity extends AppCompatActivity
     private RegistroAlertaController registroAlertaController;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
-    private ViewPager2 viewPager;
+    public ViewPager2 viewPager;
     private ViewPagerAdapter viewPagerAdapter;
     private LocationPermissionHelper locationPermissionHelper;
     public Double latitud;
@@ -245,6 +248,7 @@ public class MainActivity extends AppCompatActivity
         viewPagerAdapter.addFragment(new ConfigurationEmergencyContactsFragment());
         viewPagerAdapter.addFragment(new ConfigurationFragment()); // Añadir el fragmento de configuración
         viewPagerAdapter.addFragment(new RegistroAlertasFragment()); // Añadir el fragmento de configuración
+        viewPagerAdapter.addFragment(new TermsFragment());
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.setUserInputEnabled(false); // Disable swiping if needed
     }
@@ -271,7 +275,7 @@ public class MainActivity extends AppCompatActivity
         mensajes.put(R.id.nav_config_user, new Pair<>(3, "Configuración"));
         mensajes.put(R.id.nav_alerts, new Pair<>(4, "Alertas"));
         mensajes.put(R.id.nav_photo, new Pair<>(-1, "Tomar foto"));
-        mensajes.put(R.id.nav_terms, new Pair<>(-1, "Términos y condiciones"));
+        mensajes.put(R.id.nav_terms, new Pair<>(5, "Términos y condiciones"));
         mensajes.put(R.id.nav_privacy, new Pair<>(-1, "Aviso de privacidad"));
 
         // Manejar navegación entre fragmentos
