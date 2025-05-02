@@ -1,155 +1,178 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#4D017D"
+    android:background="@drawable/gradient_background"
     tools:context=".fragments.ConfigurationFragment">
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="20dp" />
-
-    <TextView
-        android:id="@+id/textViewTitleInfo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Configuración"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="46sp"
-        android:textStyle="bold" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/ivPreviewPhotoConfig"
-            android:layout_width="120sp"
-            android:layout_height="120sp"
-            android:layout_weight="1"
-            tools:src="@tools:sample/avatars" />
-
-        <Button
-            android:id="@+id/btnChangePhotoConfig"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="16dp"
-            android:background="@drawable/button_pink_background"
-            android:drawableStart="@android:drawable/ic_menu_camera"
-            android:drawablePadding="8dp"
-            android:padding="12dp"
-            android:text="Cambiar Foto"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:translationX="-20dp"
-            android:translationY="10sp" />
-
-    </LinearLayout>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-
-    <LinearLayout
+    <!-- Carta Blanca Contenedora -->
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_margin="16dp"
+        app:cardBackgroundColor="#FFFFFF"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <EditText
-            android:id="@+id/etTelefonoUsuarioConfig"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@drawable/edit_text_background"
-            android:ems="10"
-            android:hint="Numero de Telefono"
-            android:inputType="phone"
-            android:padding="12dp"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:textSize="24sp" />
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="20dp" />
-
-        <EditText
-            android:id="@+id/etDomicilioUsuarioConfig"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@drawable/edit_text_background"
-            android:ems="10"
-            android:hint="Domicilio"
-            android:inputType="text"
-            android:padding="12dp"
-            android:textColor="#FFF"
-            android:textColorHint="@color/white"
-            android:textSize="24sp" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="20dp" />
-
-        <!-- Toggle para configurar captura automática de foto -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:padding="10dp"
-            android:background="@drawable/edit_text_background"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Tomar foto automática en alerta"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:orientation="vertical"
+                android:padding="24dp">
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/stTomarFotoAutomaticoConfig"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                app:thumbTint="@color/nav_item_colors"
-                app:trackTint="@color/nav_item_colors"
-                android:layout_marginRight="20dp"/>
+                <!-- Título -->
+                <TextView
+                    android:id="@+id/textViewTitleInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:text="Configuración"
+                    android:textAlignment="center"
+                    android:textColor="#6A1B9A"
+                    android:textSize="28sp"
+                    android:textStyle="bold"/>
 
-        </LinearLayout>
+                <!-- Sección Foto de Perfil -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="30dp"/>
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        app:cardCornerRadius="60dp"
+                        app:cardElevation="8dp"
+                        app:cardBackgroundColor="#F3E5F5">
 
-        <Button
-            android:id="@+id/btnGuardarCambiosUsuarioConfig"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
-            android:background="@drawable/button_pink_background"
-            android:text="Guardar Cambios"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-    </LinearLayout>
+                        <ImageView
+                            android:id="@+id/ivPreviewPhotoConfig"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            tools:src="@tools:sample/avatars"/>
+                    </androidx.cardview.widget.CardView>
 
-</LinearLayout>
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnChangePhotoConfig"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Cambiar Foto"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:drawableStart="@android:drawable/ic_menu_camera"
+                        android:drawablePadding="8dp"
+                        android:paddingHorizontal="24dp"
+                        app:iconTint="#FFFFFF"
+                        app:backgroundTint="#6A1B9A"
+                        app:cornerRadius="24dp"
+                        app:rippleColor="#9C27B0"
+                        app:elevation="4dp"/>
+                </LinearLayout>
+
+                <!-- Campos de Configuración -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:boxStrokeColor="#6A1B9A"
+                    app:hintTextColor="#6A1B9A">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etTelefonoUsuarioConfig"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Número de Teléfono"
+                        android:inputType="phone"
+                        android:textColor="#212121"
+                        android:textSize="16sp"
+                        android:padding="16dp"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:boxStrokeColor="#6A1B9A"
+                    app:hintTextColor="#6A1B9A">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etDomicilioUsuarioConfig"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Domicilio"
+                        android:inputType="text"
+                        android:textColor="#212121"
+                        android:textSize="16sp"
+                        android:padding="16dp"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Switch para foto automática -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    app:cardBackgroundColor="#F3E5F5"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="16dp"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Tomar foto automática en alerta"
+                            android:textColor="#6A1B9A"
+                            android:textSize="16sp"/>
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/stTomarFotoAutomaticoConfig"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            app:thumbTint="#6A1B9A"
+                            app:trackTint="#E1BEE7"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Botón Guardar -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnGuardarCambiosUsuarioConfig"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Guardar Cambios"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:paddingVertical="16dp"
+                    app:backgroundTint="#6A1B9A"
+                    app:cornerRadius="12dp"
+                    app:rippleColor="#9C27B0"
+                    app:elevation="6dp"/>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
