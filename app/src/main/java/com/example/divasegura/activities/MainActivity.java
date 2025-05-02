@@ -29,6 +29,7 @@ import com.example.divasegura.controladores.UsuariosController;
 import com.example.divasegura.fragments.ConfigurationEmergencyContactsFragment;
 import com.example.divasegura.fragments.ConfigurationFragment;
 import com.example.divasegura.fragments.InformationFragment;
+import com.example.divasegura.fragments.PrivacyFragment;
 import com.example.divasegura.fragments.RegistroAlertasFragment;
 import com.example.divasegura.fragments.TermsFragment;
 import com.example.divasegura.modelos.Contacto;
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity
     private static final int SMS_PERMISSION_REQUEST_CODE = 100;
     private Intent locationServiceIntent;
     private Usuario usuario;
-    private Contacto contacto1,contacto2;
+    private Contacto contacto1, contacto2;
     private ContactoController contactoController;
     private UsuariosController usuariosController;
     private RegistroAlertaController registroAlertaController;
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity
     private static final int REQUEST_CAMERA_PERMISSION = 100;
     private String currentPhotoPath;
 
-     @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity
         // Set up ViewPager
         viewPager = findViewById(R.id.viewPager);
         setupViewPager();
-         viewPager.setCurrentItem(0);
+        viewPager.setCurrentItem(0);
 
         usuariosController = new UsuariosController(this);
         contactoController = new ContactoController(this);
@@ -115,41 +116,40 @@ public class MainActivity extends AppCompatActivity
         registroAlertaController.open();
 
         // Get user data
-         usuario = usuariosController.obtenerUsuarioUnico();
-         contacto1 = contactoController.obtenerContactoUnico(1);
-         contacto2 = contactoController.obtenerContactoUnico(2);
+        usuario = usuariosController.obtenerUsuarioUnico();
+        contacto1 = contactoController.obtenerContactoUnico(1);
+        contacto2 = contactoController.obtenerContactoUnico(2);
 
-         locationPermissionHelper = new LocationPermissionHelper(this, this);
-         requestLocationPermissionOnStart();
+        locationPermissionHelper = new LocationPermissionHelper(this, this);
+        requestLocationPermissionOnStart();
     }
 
     private void requestLocationPermissionOnStart() {
-         if(ActivityCompat.shouldShowRequestPermissionRationale(this,
-                 Manifest.permission.ACCESS_FINE_LOCATION)) {
-             showLocationRationaleDialog();
-         } else {
-             locationPermissionHelper.checkLocationPermission();
-         }
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)) {
+            showLocationRationaleDialog();
+        } else {
+            locationPermissionHelper.checkLocationPermission();
+        }
     }
 
     private void showLocationRationaleDialog() {
-         new AlertDialog.Builder(this)
-                 .setTitle("Permiso de ubicación requerida")
-                 .setMessage("Diva-Segura necesita acceso a su ubicación para enviar alertas de emergencia.")
-                 .setPositiveButton("OK", (dialog, which) -> {
-                     locationPermissionHelper.checkLocationPermission();
-                 })
-                 .setNegativeButton("Later", (dialog, which) -> {
-                     proceedWithoutLocation();
-                 })
-                 .setCancelable(false)
-                 .show();
+        new AlertDialog.Builder(this)
+                .setTitle("Permiso de ubicación requerida")
+                .setMessage("Diva-Segura necesita acceso a su ubicación para enviar alertas de emergencia.")
+                .setPositiveButton("OK", (dialog, which) -> {
+                    locationPermissionHelper.checkLocationPermission();
+                })
+                .setNegativeButton("Later", (dialog, which) -> {
+                    proceedWithoutLocation();
+                })
+                .setCancelable(false)
+                .show();
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions, @NonNull int[] grantResults) {
+            @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         // Handle Location Permission Result
@@ -185,13 +185,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void proceedWithApp() {
-         Toast.makeText(this, "Permiso de ubicación concedido", Toast.LENGTH_SHORT).show();
-         startLocationService();
+        Toast.makeText(this, "Permiso de ubicación concedido", Toast.LENGTH_SHORT).show();
+        startLocationService();
     }
 
     private void proceedWithoutLocation() {
-         Toast.makeText(this, "Ubicación no disponible, es obligatorio para usar Diva-Segura", Toast.LENGTH_SHORT).show();
-         requestLocationPermissionOnStart();
+        Toast.makeText(this, "Ubicación no disponible, es obligatorio para usar Diva-Segura", Toast.LENGTH_SHORT)
+                .show();
+        requestLocationPermissionOnStart();
     }
 
     private void startLocationService() {
@@ -215,7 +216,7 @@ public class MainActivity extends AppCompatActivity
                     Toast.makeText(this, "No location available", Toast.LENGTH_SHORT).show();
                 }
             }, 5000);
-        }catch (Exception e){
+        } catch (Exception e) {
             Toast.makeText(this, "Error starting location tracking", Toast.LENGTH_SHORT).show();
         }
     }
@@ -223,10 +224,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(locationServiceIntent != null) {
+        if (locationServiceIntent != null) {
             stopService(locationServiceIntent);
         }
     }
+
     private void setupViewPager() {
         viewPagerAdapter = new ViewPagerAdapter(this);
         viewPagerAdapter.addFragment(MainScreenFragment.newInstance());
@@ -235,10 +237,10 @@ public class MainActivity extends AppCompatActivity
         viewPagerAdapter.addFragment(new ConfigurationFragment()); // Añadir el fragmento de configuración
         viewPagerAdapter.addFragment(new TermsFragment());
         viewPagerAdapter.addFragment(new RegistroAlertasFragment()); // Añadir el fragmento de configuración
+        viewPagerAdapter.addFragment(new PrivacyFragment());
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.setUserInputEnabled(false); // Disable swiping if needed
     }
-
 
     @Override
     public void onBackPressed() {
@@ -262,16 +264,16 @@ public class MainActivity extends AppCompatActivity
         mensajes.put(R.id.nav_alerts, 5);
         mensajes.put(R.id.nav_photo, 10);
         mensajes.put(R.id.nav_terms, 4);
-        mensajes.put(R.id.nav_privacy, -1);
+        mensajes.put(R.id.nav_privacy, 11);
 
-// Manejar navegación entre fragmentos
+        // Manejar navegación entre fragmentos
         Integer indice = mensajes.get(id);
-            if (indice >= 0 && indice != 10) {
-                viewPager.setCurrentItem(indice); // Cambiar al fragmento correspondiente
-            } else if (indice == 10) {
-                checkCameraPermission();
-                viewPager.setCurrentItem(0);
-            }
+        if (indice >= 0 && indice != 10) {
+            viewPager.setCurrentItem(indice); // Cambiar al fragmento correspondiente
+        } else if (indice == 10) {
+            checkCameraPermission();
+            viewPager.setCurrentItem(0);
+        }
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
@@ -286,20 +288,20 @@ public class MainActivity extends AppCompatActivity
         // Get current location
         LocationTracker locationTracker = new LocationTracker(this);
         locationTracker.onCreate();
-        Location currentLocation =  locationTracker.getLastLocation();
+        Location currentLocation = locationTracker.getLastLocation();
 
         // Prepare emergency message with location
         String locationText = "No hay ubicación disponible";
         if (currentLocation != null) {
             locationText = "https://maps.google.com/?q=" +
-                       currentLocation.getLatitude() + "," +
-                       currentLocation.getLongitude();
+                    currentLocation.getLatitude() + "," +
+                    currentLocation.getLongitude();
             latitud = currentLocation.getLatitude();
             longitud = currentLocation.getLongitude();
         }
 
         String emergencyMessage = "ALERTA DE EMERGENCIA: " + usuario.getNombre() +
-                             " está en peligro. Ubicación: " + locationText;
+                " está en peligro. Ubicación: " + locationText;
 
         // Send message to registered contacts
         if (contacto1 != null && contacto1.getNumero() != null) {
@@ -324,7 +326,7 @@ public class MainActivity extends AppCompatActivity
             smsManager.sendMultipartTextMessage(phoneNumber, null, parts, null, null);
         } catch (Exception e) {
             Toast.makeText(this, "Error al enviar mensaje: " + e.getMessage(),
-                          Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }
@@ -339,15 +341,15 @@ public class MainActivity extends AppCompatActivity
         new Handler().postDelayed(() -> {
             stopService(extendedLocationIntent);
             Toast.makeText(this, "Compartir ubicación finalizada",
-                          Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT).show();
         }, minutes * 60 * 1000);
     }
 
     private boolean checkSmsPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.SEND_SMS},
+                    new String[] { Manifest.permission.SEND_SMS },
                     SMS_PERMISSION_REQUEST_CODE);
             return false;
         }
@@ -355,10 +357,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void checkCameraPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CAMERA},
+                    new String[] { Manifest.permission.CAMERA },
                     REQUEST_CAMERA_PERMISSION);
         } else {
             launchCamera();
@@ -387,6 +388,7 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
+
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
@@ -396,8 +398,7 @@ public class MainActivity extends AppCompatActivity
         File imageFile = File.createTempFile(
                 imageFileName,
                 ".jpg",
-                storageDir
-        );
+                storageDir);
 
         currentPhotoPath = imageFile.getAbsolutePath();
         return imageFile;
@@ -454,8 +455,7 @@ public class MainActivity extends AppCompatActivity
                     fechaActual,
                     latitud,
                     longitud,
-                    currentPhotoPath
-            );
+                    currentPhotoPath);
 
             if (id != -1) {
                 Toast.makeText(this, "Alerta con foto guardada correctamente", Toast.LENGTH_SHORT).show();

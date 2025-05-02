@@ -119,5 +119,38 @@
     📅 Última actualización: Enero 2023
     </string>
 
+    <string name="texto_terminos_completo">
+    🔐 <b>Uso de Localización:</b>\nLa aplicación requiere acceso a tu ubicación únicamente durante emergencias para enviar tu posición exacta a tus contactos.\n\n
+    📱 <b>Envío de SMS:</b>\nAl activar una emergencia, se enviarán mensajes automáticos a tus contactos registrados (costos de SMS aplican según tu plan).\n\n
+    ⚠️ <b>Uso Responsable:</b>\nDiva Segura es para emergencias reales. El mal uso puede tener consecuencias legales.\n\n
+    👮 <b>Autoridades:</b>\nEn situaciones de peligro, la aplicación puede sugerir contacto con policía/local de emergencias.\n\n
+    🌐 <b>Privacidad:</b>\nTu ubicación solo se comparte cuando activas manualmente una alerta.\n\n
+    🛡️ <b>Seguridad:</b>\nLos datos se almacenan localmente en tu dispositivo y no se comparten con terceros.\n\n
+    📅 Última actualización: Mayo 2025
+    </string>
+
+    <string name="texto_aviso_privacidad">
+    📍 <b>Localización:</b>\n
+    • Solo se activa cuando <b>tú</b> inicias una emergencia.\n
+    • Se comparte <b>exclusivamente</b> con tus contactos de emergencia registrados.\n
+    • No se rastrea tu ubicación en ningún otro momento.\n\n
+
+    📞 <b>Llamadas:</b>\n
+    • Solo se realizan al <b>número de emergencia local</b> (911) cuando tú lo activas.\n\n
+
+    ✉️ <b>Mensajes (SMS):</b>\n
+    • Se envían <b>únicamente</b> a tus contactos de emergencia predefinidos.\n
+    • Incluyen tu ubicación <b>en el momento de activación</b> (no histórica).\n\n
+
+    💾 <b>Almacenamiento de datos:</b>\n
+    • <b>No</b> utilizamos servidores remotos.\n
+    • Toda la información (contactos, registros) se guarda <b>solo en tu dispositivo</b>.\n\n
+
+    🛡️ <b>Tus derechos:</b>\n
+    • La app no recopila datos personales beyond lo estrictamente necesario.\n\n
+
+    📅 <i>Última actualización: Mayo 2025</i>
+</string>
+
     <string name="volver">Volver atrás</string>
 </resources>
